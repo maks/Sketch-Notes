@@ -1,0 +1,7 @@
+h1. Research
+
+h2. Gfx
+
+* "how to draw simple grid using android 2d api":http://www.ceveni.com/2009/07/sample-program-to-draw-grid-using.html 
+* "simple drawing program using android 2d api":http://marakana.com/tutorials/android/2d-graphics-example.html 
+* "simple drawing app from android samples": http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/graphics/TouchPaint.html 
