@@ -17,12 +17,20 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
 public class SKNotes extends Activity {
 
+	/** Menu ID for the command to clear the window. */
+    private static final int CLEAR_ID = Menu.FIRST;
+    /** Menu ID for the command to toggle fading. */
+    private static final int PAGELIST_ID = Menu.FIRST+1;
+
+	
 	/** The view responsible for drawing the window. */
 	SketchView sView;
 
@@ -34,6 +42,27 @@ public class SKNotes extends Activity {
 		setContentView(new SketchView(this));
 
 	}
+	
+	@Override public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, CLEAR_ID, 0, "Clear");
+        menu.add(0, PAGELIST_ID, 0, "Pages");
+        return super.onCreateOptionsMenu(menu);
+    }
+	
+	 @Override public boolean onOptionsItemSelected(MenuItem item) {
+	        switch (item.getItemId()) {
+	            case CLEAR_ID:
+	                sView.clear();
+	                return true;
+	            case PAGELIST_ID:
+	                //TODO: show list of saved notes
+	                return true;
+	            default:
+	                return super.onOptionsItemSelected(item);
+	        }
+	    }
+
+	
 
 	public class SketchView extends View implements OnTouchListener {
 
@@ -184,8 +213,16 @@ public class SKNotes extends Activity {
 			
 			for (int i = 0; i < height; i+=ypos) {
 				mCanvas.drawLine(0, i, width, i, gridPainter);
-			}
-            
+			}            
+        }
+		
+		public void clear() {
+            if (mCanvas != null) {
+            	Paint clearer = new Paint();
+            	clearer.setARGB(0xff, 0, 0, 0);
+                mCanvas.drawPaint(clearer);
+                invalidate();
+            }
         }
 		
 		private void drawPoint(float x, float y, float pressure, float width) {
