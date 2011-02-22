@@ -14,6 +14,7 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -43,9 +44,6 @@ public class SKNotes extends Activity {
 		private Path circle;
 
 		private Path grid;
-
-//		private final Paint cPaint;
-//		private final Paint tPaint;
 		
 		private static final int FADE_ALPHA = 0x06;
         private static final int MAX_FADE_STEPS = 256/FADE_ALPHA + 4;
@@ -54,8 +52,10 @@ public class SKNotes extends Activity {
         private Bitmap mBitmap;
         private Canvas mCanvas;
         private final Rect mRect = new Rect();
-        private final Paint mPaint;
-        private final Paint mFadePaint;
+        private final Paint pagePainter;
+        private final Paint gridPainter;
+        private final Paint penPainter;
+        
         private float mCurX;
         private float mCurY;
         private int mFadeSteps = MAX_FADE_STEPS;
@@ -69,26 +69,19 @@ public class SKNotes extends Activity {
 		public SketchView(Context context) {
 			super(context);
 			
-//			setFocusable(true);
-//	        setFocusableInTouchMode(true);
-//			this.setOnTouchListener(this);
-//
-//			int color = Color.BLUE; // solid blue
-//
-//			cPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//			cPaint.setStyle(Paint.Style.STROKE);
-//			cPaint.setColor(color);
-//			cPaint.setStrokeWidth(1);
-//
-//			tPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-			
 			setFocusable(true);
-            mPaint = new Paint();
-            mPaint.setAntiAlias(true);
-            mPaint.setARGB(255, 255, 255, 255);
-            mFadePaint = new Paint();
-            mFadePaint.setDither(true);
-            mFadePaint.setARGB(FADE_ALPHA, 0, 0, 0);
+            pagePainter = new Paint();
+            pagePainter.setAntiAlias(true);
+            pagePainter.setColor(getResources().getColor(R.color.page_colour));
+			
+            gridPainter = new Paint();
+			gridPainter.setColor(getResources().getColor(R.color.grid_colour));
+			gridPainter.setStyle(Style.STROKE);
+						
+			penPainter = new Paint();
+			penPainter.setColor(getResources().getColor(R.color.pen_colour));
+			//penPainter.setStyle(Style.STROKE);
+			
 		}
 
 		@Override
@@ -97,53 +90,17 @@ public class SKNotes extends Activity {
                 canvas.drawBitmap(mBitmap, 0, 0, null);
             } else {
             	Log.e(TAG, "NO BITMAP!");
-            }
-			
-			// Drawing commands go here
-
-			// custom drawing code here
-			// remember: y increases from top to bottom
-			// x increases from left to right
-
-//			Paint paint = new Paint();
-//			paint.setStyle(Paint.Style.FILL);
-//
-//			// make the entire canvas white
-//			paint.setColor(Color.WHITE);
-//			canvas.drawPaint(paint);
-//
-//			Display display = getWindowManager().getDefaultDisplay();
-//			width = display.getWidth();// start
-//			height = display.getHeight();// end
-//
-//			int NUM_OF_LINES = 30;
-//
-//			xpos = width / NUM_OF_LINES;
-//			ypos = height / NUM_OF_LINES;
-//
-//			for (int i = 0; i < NUM_OF_LINES; i++) {
-//
-//				paint.setColor(Color.BLUE);
-//				canvas.drawLine(xpos + (xpos * i), 0, xpos + (xpos * i),
-//						height, paint);
-//
-//			}
-//			paint.setStyle(Style.STROKE);
-//			for (int i = 0; i < NUM_OF_LINES; i++) {
-//				paint.setColor(Color.BLUE);
-//				canvas.drawLine(0, (ypos * pass) + 5, width, (ypos * pass) + 5,
-//						paint);
-//				pass++;
-//			}
-//
-//			for (Point point : points) {
-//				canvas.drawCircle(point.x, point.y, 1, paint);
-//				Log.d(TAG, "Painting: "+point);
-//			}
+            }			
 		}
 
 		@Override
 		public boolean onTouchEvent(MotionEvent event) {
+			
+			//API level 9 and above supports "Major" property on event which gives
+			//the size of the touch area at the point of contact
+			//so for now we just hard code
+			int TOUCH_AREA_SIZE = 5;
+			
 			int action = event.getAction();
             if (action != MotionEvent.ACTION_UP && action != MotionEvent.ACTION_CANCEL) {
                 int N = event.getHistorySize();
@@ -153,14 +110,13 @@ public class SKNotes extends Activity {
                         mCurX = event.getHistoricalX(j, i);
                         mCurY = event.getHistoricalY(j, i);
                         drawPoint(mCurX, mCurY,
-                                event.getHistoricalPressure(j, i),
-                                1);
+                                event.getHistoricalPressure(j, i), TOUCH_AREA_SIZE);
                     }
                 }
                 for (int j = 0; j < P; j++) {
                     mCurX = event.getX(j);
                     mCurY = event.getY(j);
-                    drawPoint(mCurX, mCurY, event.getPressure(j), 1);
+                    drawPoint(mCurX, mCurY, event.getPressure(j), TOUCH_AREA_SIZE);
                 }
             }
             return true;
@@ -183,7 +139,7 @@ public class SKNotes extends Activity {
 		@Override protected void onSizeChanged(int w, int h, int oldw,
                 int oldh) {
 			
-			Log.i(TAG, "Size changed");
+			Log.i(TAG, "Size changed w:"+w+" h:"+h);
 			
             int curW = mBitmap != null ? mBitmap.getWidth() : 0;
             int curH = mBitmap != null ? mBitmap.getHeight() : 0;
@@ -204,32 +160,30 @@ public class SKNotes extends Activity {
             mBitmap = newBitmap;
             mCanvas = newCanvas;
             
-            // make the entire canvas white
-			mPaint.setColor(Color.WHITE);
-			mCanvas.drawPaint(mPaint);
-			mPaint.setStyle(Style.STROKE);
+            // make the entire canvas page colour
+			mCanvas.drawPaint(pagePainter);
 			
 			//Draw Background Grid
 			Display display = getWindowManager().getDefaultDisplay();
 			width = display.getWidth();// start
 			height = display.getHeight();// end
 
-			int NUM_OF_LINES = width / 10;
-
-			xpos = width / NUM_OF_LINES;
-			ypos = height / NUM_OF_LINES;
-
-			for (int i = 0; i < NUM_OF_LINES; i++) {
-				mPaint.setColor(Color.BLUE);
-				mCanvas.drawLine(xpos + (xpos * i), 0, xpos + (xpos * i),
-						height, mPaint);
+			DisplayMetrics outMetrics = new DisplayMetrics();
+			display.getMetrics(outMetrics);
+			Log.i(TAG, "screen metrics: xdpi:"+outMetrics.xdpi+" ydpi:"+outMetrics.ydpi);
+			
+			//we want 1/4 inch square graph paper:
+			xpos = Math.round(outMetrics.xdpi * 0.25f);
+			ypos = Math.round(outMetrics.ydpi * 0.25f);
+					
+			Log.i(TAG, "xpos:"+xpos+" ypos:"+ypos);
+			
+			for (int i = 0; i < width; i+=xpos) {
+				mCanvas.drawLine(i, 0, i, height, gridPainter);
 			}
 			
-			for (int i = 0; i < NUM_OF_LINES; i++) {
-				mPaint.setColor(Color.BLUE);
-				mCanvas.drawLine(0, (ypos * pass) + 5, width, (ypos * pass) + 5,
-						mPaint);
-				pass++;
+			for (int i = 0; i < height; i+=ypos) {
+				mCanvas.drawLine(0, i, width, i, gridPainter);
 			}
             
         }
@@ -240,10 +194,13 @@ public class SKNotes extends Activity {
             if (width < 1) width = 1;
             if (mBitmap != null) {
                 float radius = width / 2;
-                int pressureLevel = (pressure == 0) ? 255 : (int)(pressure * 255);
-                mPaint.setARGB(pressureLevel, 255, 0, 0);
                 
-                mCanvas.drawCircle(x, y, radius, mPaint);
+                
+                //TODO: need to test on a device that supports pressure sensitive input
+                //int pressureLevel = (pressure == 0) ? 255 : (int)(pressure * 255);
+                //penPainter.setARGB(pressureLevel, 255, 0, 0);
+                
+                mCanvas.drawCircle(x, y, radius, penPainter);
                 mRect.set((int) (x - radius - 2), (int) (y - radius - 2),
                         (int) (x + radius + 2), (int) (y + radius + 2));
                 invalidate(mRect);
