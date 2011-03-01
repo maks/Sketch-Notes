@@ -5,7 +5,14 @@ h2. Gfx
 * "how to draw simple grid using android 2d api":http://www.ceveni.com/2009/07/sample-program-to-draw-grid-using.html 
 * "simple drawing program using android 2d api":http://marakana.com/tutorials/android/2d-graphics-example.html 
 * "simple drawing app from android samples":http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/graphics/TouchPaint.html 
+* "working with bitmaps article":http://www.higherpass.com/Android/Tutorials/Working-With-Images-In-Android/2/
 
+
+h2. Design
+
+* "non photo blue colour used for gridline":http://en.wikipedia.org/wiki/Non-photo_blue
+* "handy list of colurs adn rgb values":http://en.wikipedia.org/wiki/List_of_colours
+* "open clipart library":http://www.openclipart.org/tags/paper?page=1
 
 h2. Devices
 

@@ -1,5 +1,10 @@
 package com.manichord.sketchnotes;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,14 +12,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -25,11 +29,18 @@ import android.view.View.OnTouchListener;
 
 public class SKNotes extends Activity {
 
+	private static final String TAG = "SKNotes";
+
 	/** Menu ID for the command to clear the window. */
 	private static final int CLEAR_ID = Menu.FIRST;
-	/** Menu ID for the command to toggle fading. */
-	private static final int PAGELIST_ID = Menu.FIRST + 1;
-	private static final String TAG = "SKNotes";
+
+	/** Menu ID for the command to list pages */
+	// private static final int PAGELIST_ID = Menu.FIRST + 1;
+
+	private static final int LOAD_ID = Menu.FIRST + 1;
+
+	/** Menu ID for the command to Save current page */
+	private static final int SAVE_ID = Menu.FIRST + 2;
 
 	/** The view responsible for drawing the window. */
 	SketchView sView;
@@ -47,7 +58,9 @@ public class SKNotes extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, CLEAR_ID, 0, "Clear");
-		menu.add(0, PAGELIST_ID, 0, "Pages");
+		// menu.add(0, PAGELIST_ID, 0, "Pages");
+		menu.add(0, LOAD_ID, 0, "Load");
+		menu.add(0, SAVE_ID, 0, "Save");
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -61,8 +74,21 @@ public class SKNotes extends Activity {
 				Log.e(TAG, "NO Sketch VIEW!!!");
 			}
 			return true;
-		case PAGELIST_ID:
+			// case PAGELIST_ID:
 			// TODO: show list of saved notes
+		case LOAD_ID:
+			if (sView != null) {
+				sView.loadBitMap();
+			} else {
+				Log.e(TAG, "NO Sketch VIEW!!!");
+			}
+			return true;
+		case SAVE_ID:
+			if (sView != null) {
+				sView.saveCurrentBitMap();
+			} else {
+				Log.e(TAG, "NO Sketch VIEW!!!");
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -84,13 +110,14 @@ public class SKNotes extends Activity {
 		private final Paint gridPainter;
 		private final Paint penPainter;
 
-	
 		int width = 0;
 		int height = 0;
 		int pass = 0;
 		int xpos = 0;
 		int ypos = 0;
 		float penWidth = 0;
+
+		private String FILENAME = "saved_bitmap";
 
 		public SketchView(Context context) {
 			super(context);
@@ -105,8 +132,8 @@ public class SKNotes extends Activity {
 			gridPainter.setStyle(Style.STROKE);
 
 			penPainter = new Paint();
-			penPainter.setColor(getResources().getColor(R.color.pen_colour));
-			// penPainter.setStyle(Style.STROKE);
+			penPainter.setColor(getResources().getColor(
+					R.color.pen_colour_bluepen));
 
 			// square graph paper:
 			Resources res = getResources();
@@ -186,6 +213,7 @@ public class SKNotes extends Activity {
 					Bitmap.Config.RGB_565);
 			Canvas newCanvas = new Canvas();
 			newCanvas.setBitmap(newBitmap);
+			
 			if (mBitmap != null) {
 				newCanvas.drawBitmap(mBitmap, 0, 0, null);
 			}
@@ -244,6 +272,26 @@ public class SKNotes extends Activity {
 			}
 		}
 
-	}
+		public void saveCurrentBitMap() {
+			try {
+				FileOutputStream out = openFileOutput(FILENAME,
+						Context.MODE_PRIVATE);
+				mBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
+		public void loadBitMap() {
+			Bitmap loadedBM = BitmapFactory.decodeFile(getFilesDir()+"/"+FILENAME);
+			if (loadedBM != null) {
+				Log.i(TAG, "decoded:"
+						+ loadedBM.getHeight());		
+				mCanvas.drawBitmap(loadedBM, 0, 0, null);
+				invalidate();
+			} else {
+				Log.e(TAG, "bitmap file not found!");
+			}
+		}
+	}
 }
