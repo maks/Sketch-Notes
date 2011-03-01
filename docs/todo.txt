@@ -1,0 +1,5 @@
+* implement page save, listing and load
+* create app icon
+* dropbox sync
+* user preferences screen
+
