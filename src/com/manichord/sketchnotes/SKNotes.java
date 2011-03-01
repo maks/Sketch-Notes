@@ -272,7 +272,7 @@ public class SKNotes extends Activity {
 			try {
 				FileOutputStream out = openFileOutput(FILENAME,
 						Context.MODE_PRIVATE);
-				mBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+				mBitmap.compress(Bitmap.CompressFormat.PNG, 99, out); //note PNG lossless
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
