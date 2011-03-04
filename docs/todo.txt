@@ -1,4 +1,5 @@
 * implement page save, listing and load
+* eraser function
 * create app icon
 * dropbox sync
 * user preferences screen
