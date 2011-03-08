@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,12 +32,12 @@ public class SKNotes extends Activity {
 	private static final int CLEAR_ID = Menu.FIRST;
 
 	/** Menu ID for the command to list pages */
-	// private static final int PAGELIST_ID = Menu.FIRST + 1;
+	private static final int PAGELIST_ID = Menu.FIRST + 1;
 
-	private static final int LOAD_ID = Menu.FIRST + 1;
+	private static final int LOAD_ID = Menu.FIRST + 2;
 
 	/** Menu ID for the command to Save current page */
-	private static final int SAVE_ID = Menu.FIRST + 2;
+	private static final int SAVE_ID = Menu.FIRST + 3;
 
 	/** The view responsible for drawing the window. */
 	SketchView sView;
@@ -54,7 +55,7 @@ public class SKNotes extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, CLEAR_ID, 0, "Clear");
-		// menu.add(0, PAGELIST_ID, 0, "Pages");
+		menu.add(0, PAGELIST_ID, 0, "Pages");
 		menu.add(0, LOAD_ID, 0, "Load");
 		menu.add(0, SAVE_ID, 0, "Save");
 		return super.onCreateOptionsMenu(menu);
@@ -86,6 +87,10 @@ public class SKNotes extends Activity {
 				Log.e(TAG, "NO Sketch VIEW!!!");
 			}
 			return true;
+		case PAGELIST_ID:
+			Intent intent = new Intent(this, PagesList.class);
+			startActivity(intent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -96,8 +101,6 @@ public class SKNotes extends Activity {
 		private static final String TAG = "SketchView";
 
 		List<Point> points = new ArrayList<Point>();
-
-		private static final int FADE_ALPHA = 0x06;
 
 		private Bitmap mBitmap;
 		private Canvas mCanvas;
