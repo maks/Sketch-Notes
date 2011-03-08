@@ -36,10 +36,11 @@ public class SKNotes extends Activity {
 	/** Menu ID for the command to list pages */
 	private static final int PAGELIST_ID = Menu.FIRST + 1;
 
-	private static final int LOAD_ID = Menu.FIRST + 2;
-
 	/** Menu ID for the command to Save current page */
-	private static final int SAVE_ID = Menu.FIRST + 3;
+	private static final int SAVE_ID = Menu.FIRST + 2;
+	
+	/** Menu ID for the command to Save current page */
+	private static final int SETTINGS_ID = Menu.FIRST + 3;
 
 	protected static final String LOAD_FILENAME = "SKNOTES__LOAD_FILENAME";
 
@@ -67,8 +68,9 @@ public class SKNotes extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, CLEAR_ID, 0, "New");
 		menu.add(0, PAGELIST_ID, 0, "Pages");
-		menu.add(0, LOAD_ID, 0, "Load");
 		menu.add(0, SAVE_ID, 0, "Save");
+		menu.add(0, SETTINGS_ID, 0, "Settings");
+		
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -83,16 +85,7 @@ public class SKNotes extends Activity {
 			} else {
 				Log.e(TAG, "NO Sketch VIEW!!!");
 			}
-			return true;
-			// case PAGELIST_ID:
-			// TODO: show list of saved notes
-		case LOAD_ID:
-			if (sView != null) {
-				sView.loadBitMap();
-			} else {
-				Log.e(TAG, "NO Sketch VIEW!!!");
-			}
-			return true;
+			return true;		
 		case SAVE_ID:
 			if (sView != null) {
 				if (mCurrentFileName == null) {
@@ -107,6 +100,9 @@ public class SKNotes extends Activity {
 		case PAGELIST_ID:
 			Intent intent = new Intent(this, PagesList.class);
 			startActivity(intent);
+			return true;
+		case SETTINGS_ID:
+			//TODO
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -270,8 +266,8 @@ public class SKNotes extends Activity {
 		}
 
 		private void drawPoint(float x, float y, float pressure, float width) {
-			Log.i("TouchPaint", "Drawing: " + x + "x" + y + " p=" + pressure
-					+ " width=" + width);
+//			Log.i("TouchPaint", "Drawing: " + x + "x" + y + " p=" + pressure
+//					+ " width=" + width);
 			if (width < 1)
 				width = 1;
 			if (mBitmap != null) {
@@ -295,13 +291,14 @@ public class SKNotes extends Activity {
 				FileOutputStream out = openFileOutput(mCurrentFileName,
 						Context.MODE_PRIVATE);
 				mBitmap.compress(Bitmap.CompressFormat.PNG, 99, out); //note PNG lossless
+				Log.i(TAG, "saved page:"+mCurrentFileName);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
 		public void loadBitMap() {
-			Bitmap loadedBM = BitmapFactory.decodeFile(mCurrentFileName);
+			Bitmap loadedBM = BitmapFactory.decodeFile(getFilesDir()+File.separator+mCurrentFileName);
 			if (loadedBM != null) {
 				Log.i(TAG, "decoded:"
 						+ loadedBM.getHeight());		

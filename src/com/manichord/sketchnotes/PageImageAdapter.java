@@ -41,15 +41,15 @@ public class PageImageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
         
-        int THUMB_WIDTH = 200;
-        int THUMB_HEIGHT = 200;
+        //int THUMB_WIDTH = 200;
+        //int THUMB_HEIGHT = 200;
         
         
         if (convertView == null) {  // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(THUMB_WIDTH, THUMB_HEIGHT));
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            imageView.setPadding(8, 8, 8, 8);
+       //     imageView.setLayoutParams(new GridView.LayoutParams(THUMB_WIDTH, THUMB_HEIGHT));
+       //     imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+       //     imageView.setPadding(8, 8, 8, 8);
         } else {
             imageView = (ImageView) convertView;
         }
@@ -75,9 +75,14 @@ public class PageImageAdapter extends BaseAdapter {
 
 	void deletePage(int index) {
 		mFileList[index].delete();
+		Log.i(TAG, "Deleted Page:" + mFileList[index].getName());
+	}
+	
+	void renamePage(int index, String nuName) {
+		//TODO
 	}
 
 	public String getFileName(int position) {
-		return mFileList[position].getAbsolutePath();
+		return mFileList[position].getName();
 	}
 }

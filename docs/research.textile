@@ -17,6 +17,7 @@ h2. Design
 h2. Andriod UI
 
 * "context menus":http://stackoverflow.com/questions/2453620/android-how-to-find-the-position-clicked-from-the-context-menu
+* "rotate emualtor":http://www.androidpeople.com/android-rotate-emulator/
 
 h2. Devices
 

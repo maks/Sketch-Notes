@@ -24,6 +24,9 @@ public class PagesList extends Activity {
 
 	/** Menu ID for the command to clear the window. */
 	private static final int DELETE_ID = Menu.FIRST + 1;
+	
+	/** Menu ID for the command to clear the window. */
+	private static final int TAG_ID = Menu.FIRST + 2;
 
 	private PageImageAdapter mAdapter;
 
@@ -38,6 +41,7 @@ public class PagesList extends Activity {
 		if (gridview == null) {
 			Log.e(TAG, "NO GRIDVIEW!!");
 		} else {
+						
 			mAdapter = new PageImageAdapter(this);
 			gridview.setAdapter(mAdapter);
 
@@ -71,8 +75,12 @@ public class PagesList extends Activity {
 			Log.i(TAG, "reName Page" + index);
 			// TODO
 			return true;
+		case TAG_ID:
+			Log.i(TAG, "reName Page" + index);
+			// TODO
+			return true;			
 		case DELETE_ID:
-			Log.i(TAG, "Delete Page" + index);
+			//TODO: add confirmation dialog
 			mAdapter.deletePage(index);
 			return true;
 		default:
@@ -83,6 +91,8 @@ public class PagesList extends Activity {
 	private void populateMenu(Menu menu) {
 		menu.add(Menu.NONE, RENAME_ID, Menu.NONE, "Rename");
 		menu.add(Menu.NONE, DELETE_ID, Menu.NONE, "Delete");
+		//TODO: menu.add(Menu.NONE, TAG_ID, Menu.NONE, "Tag");
+		
 	}
 
 }
