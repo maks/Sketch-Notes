@@ -17,16 +17,16 @@ public class PageImageAdapter extends BaseAdapter {
 
 	private final String TAG = "PageImageAdapter";
 	private Context mContext;
+	private File[] mFileList;
 	ArrayList<Bitmap> mThumbs = new ArrayList<Bitmap>();
 
     public PageImageAdapter(Context c) {
-        mContext = c;
-        
+        mContext = c;        
         makeThumbs();
     }
 
     public int getCount() {
-        return 5;//mThumbs.size();
+        return mThumbs.size();
     }
 
     public Object getItem(int position) {
@@ -54,18 +54,30 @@ public class PageImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
         
-        imageView.setImageBitmap(mThumbs.get(0));
+        imageView.setImageBitmap(mThumbs.get(position));
         return imageView;
     }
 
     private void makeThumbs() {
-    	File[] fileList = mContext.getFilesDir().listFiles();
+    	File storeDir = mContext.getFilesDir();
+    	if (storeDir != null) {
+    		mFileList = storeDir.listFiles();    	
+    	} else {
+    		Log.e(TAG, "invalid store dir:"+storeDir);
+    	}
     	
-    	
-    	for(File iFile:fileList) {
+    	for(File iFile:mFileList) {
     		Log.e(TAG, "img files:"+iFile.getName());
     		Bitmap loadedBM = BitmapFactory.decodeFile(iFile.getAbsolutePath());
     		mThumbs.add(loadedBM);
     	}		
+	}
+
+	void deletePage(int index) {
+		mFileList[index].delete();
+	}
+
+	public String getFileName(int position) {
+		return mFileList[position].getAbsolutePath();
 	}
 }

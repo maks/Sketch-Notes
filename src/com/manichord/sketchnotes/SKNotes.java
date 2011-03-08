@@ -1,7 +1,9 @@
 package com.manichord.sketchnotes;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -39,22 +41,31 @@ public class SKNotes extends Activity {
 	/** Menu ID for the command to Save current page */
 	private static final int SAVE_ID = Menu.FIRST + 3;
 
+	protected static final String LOAD_FILENAME = "SKNOTES__LOAD_FILENAME";
+
 	/** The view responsible for drawing the window. */
 	SketchView sView;
+	
+	private String mCurrentFileName;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+		
 		sView = new SketchView(this);
 		setContentView(sView);
-
+		
+		String fileToLoad = getIntent().getStringExtra(LOAD_FILENAME);
+		if (fileToLoad != null && !"".equals(fileToLoad)) {
+			mCurrentFileName = fileToLoad;
+		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, CLEAR_ID, 0, "Clear");
+		menu.add(0, CLEAR_ID, 0, "New");
 		menu.add(0, PAGELIST_ID, 0, "Pages");
 		menu.add(0, LOAD_ID, 0, "Load");
 		menu.add(0, SAVE_ID, 0, "Save");
@@ -66,6 +77,8 @@ public class SKNotes extends Activity {
 		switch (item.getItemId()) {
 		case CLEAR_ID:
 			if (sView != null) {
+				Date now = new Date();
+				mCurrentFileName = "skpage"+now.getTime()+".png";
 				sView.clear();
 			} else {
 				Log.e(TAG, "NO Sketch VIEW!!!");
@@ -82,6 +95,10 @@ public class SKNotes extends Activity {
 			return true;
 		case SAVE_ID:
 			if (sView != null) {
+				if (mCurrentFileName == null) {
+					Date now = new Date();
+					mCurrentFileName = "skpage"+now.getTime()+".png";
+				}
 				sView.saveCurrentBitMap();
 			} else {
 				Log.e(TAG, "NO Sketch VIEW!!!");
@@ -220,6 +237,8 @@ public class SKNotes extends Activity {
 			mCanvas = newCanvas;
 
 			drawPageGrid();
+			
+			loadBitMap();
 		}
 
 		public void clear() {
@@ -273,7 +292,7 @@ public class SKNotes extends Activity {
 
 		public void saveCurrentBitMap() {
 			try {
-				FileOutputStream out = openFileOutput(FILENAME,
+				FileOutputStream out = openFileOutput(mCurrentFileName,
 						Context.MODE_PRIVATE);
 				mBitmap.compress(Bitmap.CompressFormat.PNG, 99, out); //note PNG lossless
 			} catch (Exception e) {
@@ -282,7 +301,7 @@ public class SKNotes extends Activity {
 		}
 
 		public void loadBitMap() {
-			Bitmap loadedBM = BitmapFactory.decodeFile(getFilesDir()+"/"+FILENAME);
+			Bitmap loadedBM = BitmapFactory.decodeFile(mCurrentFileName);
 			if (loadedBM != null) {
 				Log.i(TAG, "decoded:"
 						+ loadedBM.getHeight());		
