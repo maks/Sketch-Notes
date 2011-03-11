@@ -63,9 +63,8 @@ public class SKNotes extends Activity {
 		String fileToLoad = getIntent().getStringExtra(LOAD_FILENAME);
 		if (fileToLoad != null && !"".equals(fileToLoad)) {
 			mCurrentFileName = fileToLoad;
-		} else {
-				
-				mCurrentFileName = "skpage"+now.getTime()+".png";
+		} else {				
+			mCurrentFileName = "skpage"+now.getTime()+".png";
 		}
 		
 		lastSaveTime = now.getTime();
@@ -119,6 +118,10 @@ public class SKNotes extends Activity {
 
 		private Bitmap mBitmap;
 		private Canvas mCanvas;
+		
+		private Bitmap mBackgroundBitmap;
+		private Canvas mBackgroundCanvas;
+		
 		private final Rect mRect = new Rect();
 		private final Paint pagePainter;
 		private final Paint gridPainter;
@@ -159,6 +162,11 @@ public class SKNotes extends Activity {
 
 		@Override
 		protected void onDraw(Canvas canvas) {
+			if (mBackgroundCanvas != null) {
+				canvas.drawBitmap(mBackgroundBitmap, 0, 0, null);
+			} else {
+				Log.e(TAG, "NO BACKGROUND BITMAP!");
+			}
 			if (mBitmap != null) {
 				canvas.drawBitmap(mBitmap, 0, 0, null);
 			} else {
@@ -228,16 +236,28 @@ public class SKNotes extends Activity {
 			if (curH < h)
 				curH = h;
 
-			Bitmap newBitmap = Bitmap.createBitmap(curW, curH,
+			Bitmap newBackgroundBitmap = Bitmap.createBitmap(curW, curH,
 					Bitmap.Config.RGB_565);
+			Canvas newBackgroundCanvas = new Canvas();
+			newBackgroundCanvas.setBitmap(newBackgroundBitmap);
+			
+			Bitmap newBitmap = Bitmap.createBitmap(curW, curH,
+					Bitmap.Config.ARGB_8888);
 			Canvas newCanvas = new Canvas();
 			newCanvas.setBitmap(newBitmap);
+			
 			
 			if (mBitmap != null) {
 				newCanvas.drawBitmap(mBitmap, 0, 0, null);
 			}
+			if (mBackgroundBitmap != null) {
+				newBackgroundCanvas.drawBitmap(mBackgroundBitmap, 0, 0, null);
+			}
 			mBitmap = newBitmap;
 			mCanvas = newCanvas;
+			
+			mBackgroundBitmap = newBackgroundBitmap;
+			mBackgroundCanvas = newBackgroundCanvas;
 
 			drawPageGrid();
 			
@@ -256,7 +276,7 @@ public class SKNotes extends Activity {
 
 		private void drawPageGrid() {
 			// make the entire canvas page colour
-			mCanvas.drawPaint(pagePainter);
+			mBackgroundCanvas.drawPaint(pagePainter);
 
 			// Draw Background Grid
 			Display display = getWindowManager().getDefaultDisplay();
@@ -264,11 +284,10 @@ public class SKNotes extends Activity {
 			height = display.getHeight();// end
 
 			for (int i = 0; i < width; i += xpos) {
-				mCanvas.drawLine(i, 0, i, height, gridPainter);
+				mBackgroundCanvas.drawLine(i, 0, i, height, gridPainter);
 			}
-
 			for (int i = 0; i < height; i += ypos) {
-				mCanvas.drawLine(0, i, width, i, gridPainter);
+				mBackgroundCanvas.drawLine(0, i, width, i, gridPainter);
 			}
 		}
 
