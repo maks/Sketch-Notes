@@ -37,9 +37,6 @@ public class SKNotes extends Activity {
 	private static final int PAGELIST_ID = Menu.FIRST + 1;
 
 	/** Menu ID for the command to Save current page */
-	private static final int SAVE_ID = Menu.FIRST + 2;
-	
-	/** Menu ID for the command to Save current page */
 	private static final int SETTINGS_ID = Menu.FIRST + 3;
 
 	protected static final String LOAD_FILENAME = "SKNOTES__LOAD_FILENAME";
@@ -48,6 +45,10 @@ public class SKNotes extends Activity {
 	SketchView sView;
 	
 	private String mCurrentFileName;
+	
+	private long lastSaveTime;
+	
+	private int SAVE_DELAY = 30 * 1000; //30sec
 
 	/** Called when the activity is first created. */
 	@Override
@@ -57,18 +58,23 @@ public class SKNotes extends Activity {
 		
 		sView = new SketchView(this);
 		setContentView(sView);
+		Date now = new Date();
 		
 		String fileToLoad = getIntent().getStringExtra(LOAD_FILENAME);
 		if (fileToLoad != null && !"".equals(fileToLoad)) {
 			mCurrentFileName = fileToLoad;
+		} else {
+				
+				mCurrentFileName = "skpage"+now.getTime()+".png";
 		}
+		
+		lastSaveTime = now.getTime();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, CLEAR_ID, 0, "New");
 		menu.add(0, PAGELIST_ID, 0, "Pages");
-		menu.add(0, SAVE_ID, 0, "Save");
 		menu.add(0, SETTINGS_ID, 0, "Settings");
 		
 		return super.onCreateOptionsMenu(menu);
@@ -85,17 +91,6 @@ public class SKNotes extends Activity {
 			} else {
 				Log.e(TAG, "NO Sketch VIEW!!!");
 			}
-			return true;		
-		case SAVE_ID:
-			if (sView != null) {
-				if (mCurrentFileName == null) {
-					Date now = new Date();
-					mCurrentFileName = "skpage"+now.getTime()+".png";
-				}
-				sView.saveCurrentBitMap();
-			} else {
-				Log.e(TAG, "NO Sketch VIEW!!!");
-			}
 			return true;
 		case PAGELIST_ID:
 			Intent intent = new Intent(this, PagesList.class);
@@ -108,6 +103,13 @@ public class SKNotes extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		sView.saveCurrentBitMap();
+	}
+	
 
 	public class SketchView extends View implements OnTouchListener {
 
@@ -161,6 +163,11 @@ public class SKNotes extends Activity {
 				canvas.drawBitmap(mBitmap, 0, 0, null);
 			} else {
 				Log.e(TAG, "NO BITMAP!");
+			}
+			Date now = new Date();
+			if (now.getTime() > (lastSaveTime + SAVE_DELAY) ) {
+				saveCurrentBitMap();
+				lastSaveTime = now.getTime();
 			}
 		}
 
