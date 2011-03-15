@@ -1,6 +1,0 @@
-* auto saving
-* eraser function
-* create app icon
-* dropbox sync
-* user preferences screen
-
