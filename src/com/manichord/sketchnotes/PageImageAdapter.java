@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,11 +68,25 @@ public class PageImageAdapter extends BaseAdapter {
     	} else {
     		Log.e(TAG, "invalid store dir:"+storeDir);
     	}
+    	    	
+    	Paint painter = new Paint();
+    	int bgColor = mContext.getResources().getColor(R.color.page_colour);
+    	    	
+    	Canvas newCanvas = new Canvas();
+		
     	
     	for(File iFile:mFileList) {
     		Log.e(TAG, "img files:"+iFile.getName());
     		Bitmap loadedBM = BitmapFactory.decodeFile(iFile.getAbsolutePath());
-    		mThumbs.add(loadedBM);
+    		
+    		Bitmap thumbBitMap = Bitmap.createBitmap(loadedBM.getWidth(), loadedBM.getHeight(),
+    				Bitmap.Config.RGB_565);
+    		
+    		newCanvas.setBitmap(thumbBitMap);
+    		
+    		thumbBitMap.eraseColor(bgColor);
+    		newCanvas.drawBitmap(loadedBM, 0, 0, painter);
+    		mThumbs.add(thumbBitMap);
     	}		
 	}
 
