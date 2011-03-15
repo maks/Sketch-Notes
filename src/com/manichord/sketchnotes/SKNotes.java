@@ -135,6 +135,8 @@ public class SKNotes extends Activity {
 		float penWidth = 0;
 
 		private String FILENAME = "saved_bitmap";
+		
+		private boolean unsaved = false;
 
 		public SketchView(Context context) {
 			super(context);
@@ -212,6 +214,7 @@ public class SKNotes extends Activity {
 							TOUCH_AREA_SIZE);
 				}
 			}
+			unsaved = true;
 			return true;
 		}
 
@@ -313,10 +316,14 @@ public class SKNotes extends Activity {
 		}
 
 		public void saveCurrentBitMap() {
+			if (!unsaved) {
+				return; //do nothing if no unsaved changes pending
+			}
 			try {
 				FileOutputStream out = openFileOutput(mCurrentFileName,
 						Context.MODE_PRIVATE);
 				mBitmap.compress(Bitmap.CompressFormat.PNG, 99, out); //note PNG lossless
+				unsaved = false;
 				Log.i(TAG, "saved page:"+mCurrentFileName);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -329,6 +336,7 @@ public class SKNotes extends Activity {
 				Log.i(TAG, "decoded:"
 						+ loadedBM.getHeight());		
 				mCanvas.drawBitmap(loadedBM, 0, 0, null);
+				unsaved = false;
 				invalidate();
 			} else {
 				Log.e(TAG, "bitmap file not found!");
