@@ -29,6 +29,8 @@ public class PagesList extends Activity {
 	private static final int TAG_ID = Menu.FIRST + 2;
 
 	private PageImageAdapter mAdapter;
+	
+	private GridView mView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,15 +39,15 @@ public class PagesList extends Activity {
 		
 		final PagesList self = this;
 
-		GridView gridview = (GridView) findViewById(R.id.gridview);
-		if (gridview == null) {
+		mView = (GridView) findViewById(R.id.gridview);
+		if (mView == null) {
 			Log.e(TAG, "NO GRIDVIEW!!");
 		} else {
 						
 			mAdapter = new PageImageAdapter(this);
-			gridview.setAdapter(mAdapter);
+			mView.setAdapter(mAdapter);
 
-			gridview.setOnItemClickListener(new OnItemClickListener() {
+			mView.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View v,
 						int position, long id) {
 					Log.e(TAG, "pos:" + position);
@@ -54,7 +56,7 @@ public class PagesList extends Activity {
 					startActivity(intent);
 				}
 			});
-			registerForContextMenu(gridview);
+			registerForContextMenu(mView);
 		}
 	}
 
@@ -76,12 +78,13 @@ public class PagesList extends Activity {
 			// TODO
 			return true;
 		case TAG_ID:
-			Log.i(TAG, "reName Page" + index);
+			Log.i(TAG, "Tag Page" + index);
 			// TODO
 			return true;			
 		case DELETE_ID:
 			//TODO: add confirmation dialog
 			mAdapter.deletePage(index);
+			mView.invalidateViews();
 			return true;
 		default:
 			return super.onContextItemSelected(item);

@@ -39,7 +39,7 @@ public class SKNotes extends Activity {
 	/** Menu ID for the command to Save current page */
 	private static final int SETTINGS_ID = Menu.FIRST + 3;
 
-	protected static final String LOAD_FILENAME = "SKNOTES__LOAD_FILENAME";
+	protected static final String LOAD_FILENAME = "com.manichord.sketchnotes.load_filename";
 
 	/** The view responsible for drawing the window. */
 	SketchView sView;

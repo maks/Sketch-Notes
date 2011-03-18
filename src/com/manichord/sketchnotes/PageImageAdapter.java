@@ -1,13 +1,12 @@
 package com.manichord.sketchnotes;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.View;
@@ -21,32 +20,43 @@ public class PageImageAdapter extends BaseAdapter {
 	private final String TAG = "PageImageAdapter";
 	private Context mContext;
 	private File[] mFileList;
-	ArrayList<Bitmap> mThumbs = new ArrayList<Bitmap>();
+	private int mBackgroundColor;
+	private Paint mPainter;
+	
+	HashMap<String, Bitmap> mThumbs = new HashMap<String, Bitmap>();
 
     public PageImageAdapter(Context c) {
-        mContext = c;        
-        makeThumbs();
+        mContext = c;
+        mBackgroundColor = mContext.getResources().getColor(R.color.page_colour);
+        Paint mPainter = new Paint();
+    	int bgColor = mContext.getResources().getColor(R.color.page_colour);
+        
+    	getFilesList();
     }
 
-    public int getCount() {
-        return mThumbs.size();
+    public int getCount() {    	
+    	return getFilesList();
     }
 
     public Object getItem(int position) {
-        return null;
+    	return null;
     }
 
     public long getItemId(int position) {
-        return 0;
+        return mFileList[position].hashCode();
     }
 
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
+    	if (position == 0) {
+    		getFilesList();
+    	}
+    	Bitmap thumbBM = mkThumb(position);
+    	
         ImageView imageView;
-        
-        int THUMB_WIDTH = mThumbs.get(position).getWidth() / 4;
-        int THUMB_HEIGHT = mThumbs.get(position).getHeight() / 4;
-        
+          
+        int THUMB_WIDTH = thumbBM.getWidth() / 4;
+        int THUMB_HEIGHT = thumbBM.getHeight() / 4;
         
         if (convertView == null) {  // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
@@ -57,38 +67,39 @@ public class PageImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
         
-        imageView.setImageBitmap(mThumbs.get(position));
+        imageView.setImageBitmap(thumbBM);
         return imageView;
     }
 
-    private void makeThumbs() {
-    	File storeDir = mContext.getFilesDir();
+    private int getFilesList() {
+    	File storeDir = mContext.getFilesDir();    	
+    	
+    	Log.d(TAG, "getting page files list...");
+    	
     	if (storeDir != null) {
     		mFileList = storeDir.listFiles();    	
     	} else {
     		Log.e(TAG, "invalid store dir:"+storeDir);
     	}
-    	    	
-    	Paint painter = new Paint();
-    	int bgColor = mContext.getResources().getColor(R.color.page_colour);
-    	    	
-    	Canvas newCanvas = new Canvas();
-		
+    	return mFileList.length;
+    }
+    
+    private Bitmap mkThumb(int position) {
+    	Log.e(TAG, "img file:"+mFileList[position].getName());    	
     	
-    	for(File iFile:mFileList) {
-    		Log.e(TAG, "img files:"+iFile.getName());
-    		Bitmap loadedBM = BitmapFactory.decodeFile(iFile.getAbsolutePath());
-    		
-    		Bitmap thumbBitMap = Bitmap.createBitmap(loadedBM.getWidth(), loadedBM.getHeight(),
-    				Bitmap.Config.RGB_565);
-    		
-    		newCanvas.setBitmap(thumbBitMap);
-    		
-    		thumbBitMap.eraseColor(bgColor);
-    		newCanvas.drawBitmap(loadedBM, 0, 0, painter);
-    		mThumbs.add(thumbBitMap);
-    	}		
-	}
+    	Canvas newCanvas = new Canvas();
+		Bitmap loadedBM = BitmapFactory.decodeFile(mFileList[position].getAbsolutePath());
+		
+		Bitmap thumbBitMap = Bitmap.createBitmap(loadedBM.getWidth(), loadedBM.getHeight(),
+				Bitmap.Config.RGB_565);
+		
+		newCanvas.setBitmap(thumbBitMap);
+		
+		thumbBitMap.eraseColor(mBackgroundColor);
+		newCanvas.drawBitmap(loadedBM, 0, 0, mPainter);
+		return thumbBitMap;
+    }
+    
 
 	void deletePage(int index) {
 		mFileList[index].delete();
