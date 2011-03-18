@@ -239,45 +239,47 @@ public class SKNotes extends Activity {
 			if (curH < h)
 				curH = h;
 
-			Bitmap newBackgroundBitmap = Bitmap.createBitmap(curW, curH,
-					Bitmap.Config.RGB_565);
-			Canvas newBackgroundCanvas = new Canvas();
-			newBackgroundCanvas.setBitmap(newBackgroundBitmap);
+			createNewDrawingCanvasAndBitMap(curW, curH);
 			
-			Bitmap newBitmap = Bitmap.createBitmap(curW, curH,
-					Bitmap.Config.ARGB_8888);
-			Canvas newCanvas = new Canvas();
-			newCanvas.setBitmap(newBitmap);
-			
-			
-			if (mBitmap != null) {
-				newCanvas.drawBitmap(mBitmap, 0, 0, null);
-			}
-			if (mBackgroundBitmap != null) {
-				newBackgroundCanvas.drawBitmap(mBackgroundBitmap, 0, 0, null);
-			}
-			mBitmap = newBitmap;
-			mCanvas = newCanvas;
-			
-			mBackgroundBitmap = newBackgroundBitmap;
-			mBackgroundCanvas = newBackgroundCanvas;
-
-			drawPageGrid();
+			drawPageGrid(curW, curH);
 			
 			loadBitMap();
 		}
 
 		public void clear() {
-			if (mCanvas != null) {
-				Paint clearer = new Paint();
-				clearer.setARGB(0xff, 0, 0, 0);
-				mCanvas.drawPaint(clearer);
-				drawPageGrid();
-				invalidate();
-			}
+			int curW = mBitmap != null ? mBitmap.getWidth() : 0;
+			int curH = mBitmap != null ? mBitmap.getHeight() : 0;
+			
+			createNewDrawingCanvasAndBitMap(curW, curH);
+			
+			createNewDrawingCanvasAndBitMap(curW, curH);
+			invalidate();
+			
+		}
+		
+		private void createNewDrawingCanvasAndBitMap(int w, int h) {
+			Bitmap newBitmap = Bitmap.createBitmap(w, h,
+					Bitmap.Config.ARGB_8888);
+			Canvas newCanvas = new Canvas();
+			newCanvas.setBitmap(newBitmap);
+			
+			mBitmap = newBitmap;
+			mCanvas = newCanvas;
 		}
 
-		private void drawPageGrid() {
+		private void drawPageGrid(int w, int  h) {
+			Bitmap newBackgroundBitmap = Bitmap.createBitmap(w, h,
+					Bitmap.Config.RGB_565);
+			Canvas newBackgroundCanvas = new Canvas();
+			newBackgroundCanvas.setBitmap(newBackgroundBitmap);
+					
+					
+			if (mBackgroundBitmap != null) {
+				newBackgroundCanvas.drawBitmap(mBackgroundBitmap, 0, 0, null);
+			}
+			mBackgroundBitmap = newBackgroundBitmap;
+			mBackgroundCanvas = newBackgroundCanvas;
+			
 			// make the entire canvas page colour
 			mBackgroundCanvas.drawPaint(pagePainter);
 

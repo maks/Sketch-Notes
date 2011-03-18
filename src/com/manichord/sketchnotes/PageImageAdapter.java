@@ -1,6 +1,7 @@
 package com.manichord.sketchnotes;
 
 import java.io.File;
+import java.io.FilePermission;
 import java.util.HashMap;
 
 import android.content.Context;
@@ -60,9 +61,6 @@ public class PageImageAdapter extends BaseAdapter {
         
         if (convertView == null) {  // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(THUMB_WIDTH, THUMB_HEIGHT));
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            imageView.setPadding(8, 8, 8, 8);
         } else {
             imageView = (ImageView) convertView;
         }
@@ -86,9 +84,30 @@ public class PageImageAdapter extends BaseAdapter {
     
     private Bitmap mkThumb(int position) {
     	Log.e(TAG, "img file:"+mFileList[position].getName());    	
+    	//for explaination of why to use BMFactory options see 
+    	//http://stackoverflow.com/questions/477572/android-strange-out-of-memory-issue/823966#823966
+    	
+    	String filePath = mFileList[position].getAbsolutePath();
+    	
+    	BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = true;
     	
     	Canvas newCanvas = new Canvas();
-		Bitmap loadedBM = BitmapFactory.decodeFile(mFileList[position].getAbsolutePath());
+		BitmapFactory.decodeFile(filePath, opts);
+		
+		 //The new size we want to scale to
+        final double IMAGE_MAX_SIZE=250;
+		
+		int scale = 1;
+        if (opts.outHeight > IMAGE_MAX_SIZE || opts.outWidth > IMAGE_MAX_SIZE) {
+            scale = (int) Math.pow(2, (int) Math.round(Math.log(IMAGE_MAX_SIZE / (double) Math.max(opts.outHeight, opts.outWidth)) / Math.log(0.5)));
+        }
+
+        //Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        Bitmap loadedBM = BitmapFactory.decodeFile(filePath, o2);
+        
 		
 		Bitmap thumbBitMap = Bitmap.createBitmap(loadedBM.getWidth(), loadedBM.getHeight(),
 				Bitmap.Config.RGB_565);
@@ -97,6 +116,7 @@ public class PageImageAdapter extends BaseAdapter {
 		
 		thumbBitMap.eraseColor(mBackgroundColor);
 		newCanvas.drawBitmap(loadedBM, 0, 0, mPainter);
+
 		return thumbBitMap;
     }
     
