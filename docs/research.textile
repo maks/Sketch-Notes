@@ -14,6 +14,12 @@ h2. Design
 * "handy list of colurs adn rgb values":http://en.wikipedia.org/wiki/List_of_colours
 * "open clipart library":http://www.openclipart.org/tags/paper?page=1
 
+h2. Existing Apps as examples
+
+* "the article that inspired this app":http://www.alistapart.com/articles/sketching-the-visual-thinking-power-tool/
+* "draft":http://37signals.com/draft
+* "penultimate":http://www.cocoabox.com/penultimate
+
 h2. Andriod UI
 
 * "context menus":http://stackoverflow.com/questions/2453620/android-how-to-find-the-position-clicked-from-the-context-menu
