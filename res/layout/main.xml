@@ -4,9 +4,34 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
+    
+    <LinearLayout  
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_gravity="bottom|center"
+        >
+        
+        <ImageButton android:id="@+id/penButton" 
+            android:layout_width="60dip"
+            android:layout_height="wrap_content" 
+            android:layout_weight="1"
+            android:background="@color/pen_colour_selected_button"
+            android:src="@drawable/draw_icon"/>
+            
+        <ImageButton android:id="@+id/eraserButton" 
+            android:layout_width="60dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/page_colour"
+            android:src="@drawable/erase_icon"/>
+    </LinearLayout>
+    
+    <view
+	  class="com.manichord.sketchnotes.SketchView" 
+	  android:id="@+id/skview"
+	  android:layout_width="fill_parent"
+	  android:layout_height="fill_parent"
+    />    
+    
 </LinearLayout>
