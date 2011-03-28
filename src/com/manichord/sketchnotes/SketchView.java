@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -39,10 +40,12 @@ public class SketchView extends View implements OnTouchListener {
 		private Bitmap mBackgroundBitmap;
 		private Canvas mBackgroundCanvas;
 		
+		Path mCurrentPath;
+		
 		private final Rect mRect = new Rect();
-		private final Paint pagePainter;
-		private final Paint gridPainter;
-		private final Paint penPainter;
+		private final Paint mPagePainter;
+		private final Paint mGridPainter;
+		private final Paint mPenPainter;
 
 		int width = 0;
 		int height = 0;
@@ -51,7 +54,7 @@ public class SketchView extends View implements OnTouchListener {
 		int ypos = 0;
 		float penWidth = 0;
 		
-		private boolean unsaved = false;
+		private boolean mUnsaved = false;
 
 		public SketchView(Context context) {
 			this(context, null);
@@ -62,17 +65,19 @@ public class SketchView extends View implements OnTouchListener {
 
 			setFocusable(true);
 			
-			pagePainter = new Paint();
-			pagePainter.setAntiAlias(true);
-			pagePainter.setColor(getResources().getColor(R.color.page_colour));
+			mPagePainter = new Paint();
+			mPagePainter.setAntiAlias(true);
+			mPagePainter.setColor(getResources().getColor(R.color.page_colour));
 
-			gridPainter = new Paint();
-			gridPainter.setColor(getResources().getColor(R.color.grid_colour));
-			gridPainter.setStyle(Style.STROKE);
+			mGridPainter = new Paint();
+			mGridPainter.setColor(getResources().getColor(R.color.grid_colour));
+			mGridPainter.setStyle(Style.STROKE);
 
-			penPainter = new Paint();
-			penPainter.setColor(getResources().getColor(
+			mPenPainter = new Paint();
+			mPenPainter.setColor(getResources().getColor(
 					R.color.pen_colour_bluepen));
+			mPenPainter.setStrokeWidth(3);
+			mPenPainter.setStyle(Style.FILL_AND_STROKE);
 
 			// square graph paper:
 			Resources res = getResources();
@@ -113,32 +118,57 @@ public class SketchView extends View implements OnTouchListener {
 			// gives
 			// the size of the touch area at the point of contact
 			// so for now we just hard code
-			float TOUCH_AREA_SIZE = penWidth;
+			//float TOUCH_AREA_SIZE = penWidth;
 
 			int action = event.getAction();
 			if (action != MotionEvent.ACTION_UP
 					&& action != MotionEvent.ACTION_CANCEL) {
+				mCurrentPath = null;
+			}
+			if (action == MotionEvent.ACTION_DOWN) {
+				//start recording points
+				Log.d(TAG, "new PATH");
+				mCurrentPath = new Path();
+				mCurrentPath.moveTo(event.getX(), event.getY());
+				//mCurrentPath.lineTo(event.getX(), event.getY());
+			}
+			if (action == MotionEvent.ACTION_MOVE) {
+				Log.d(TAG, "new MOVE");
+				
+				//start recording points
 				int N = event.getHistorySize();
 				int P = event.getPointerCount();
 				for (int i = 0; i < N; i++) {
 					for (int j = 0; j < P; j++) {
 						mCurX = event.getHistoricalX(j, i);
 						mCurY = event.getHistoricalY(j, i);
-						drawPoint(mCurX, mCurY,
-								event.getHistoricalPressure(j, i),
-								TOUCH_AREA_SIZE);
+						
+						if (mCurrentPath != null) {
+							Log.d(TAG, "new POINT"+mCurX+","+mCurY);
+							mCurrentPath.lineTo(mCurX, mCurY);
+							
+						}
 					}
 				}
-				for (int j = 0; j < P; j++) {
-					mCurX = event.getX(j);
-					mCurY = event.getY(j);
-					drawPoint(mCurX, mCurY, event.getPressure(j),
-							TOUCH_AREA_SIZE);
+				// NO Multitouch for now
+//				for (int j = 0; j < P; j++) {
+//					mCurX = event.getX(j);
+//					mCurY = event.getY(j);
+//					mCurrentPath.lineTo(mCurX, mCurY);
+//				}
+				if (mCurrentPath != null) {
+					mCurrentPath.lineTo(event.getX(), event.getY());	
+					mCanvas.drawPath(mCurrentPath, mPenPainter);
+					Log.d(TAG, "new POINT");
+					invalidate();
 				}
+				
 			}
-			unsaved = true;
+			mUnsaved = true;
 			return true;
 		}
+		
+		
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
@@ -205,7 +235,7 @@ public class SketchView extends View implements OnTouchListener {
 			mBackgroundCanvas = newBackgroundCanvas;
 			
 			// make the entire canvas page colour
-			mBackgroundCanvas.drawPaint(pagePainter);
+			mBackgroundCanvas.drawPaint(mPagePainter);
 
 			// Draw Background Grid
 			Display display = ((Activity)getContext()).getWindowManager().getDefaultDisplay();
@@ -213,10 +243,10 @@ public class SketchView extends View implements OnTouchListener {
 			height = display.getHeight();// end
 
 			for (int i = 0; i < width; i += xpos) {
-				mBackgroundCanvas.drawLine(i, 0, i, height, gridPainter);
+				mBackgroundCanvas.drawLine(i, 0, i, height, mGridPainter);
 			}
 			for (int i = 0; i < height; i += ypos) {
-				mBackgroundCanvas.drawLine(0, i, width, i, gridPainter);
+				mBackgroundCanvas.drawLine(0, i, width, i, mGridPainter);
 			}
 		}
 
@@ -234,7 +264,7 @@ public class SketchView extends View implements OnTouchListener {
 				// 255);
 				// penPainter.setARGB(pressureLevel, 255, 0, 0);
 
-				mCanvas.drawCircle(x, y, radius, penPainter);
+				mCanvas.drawCircle(x, y, radius, mPenPainter);
 				mRect.set((int) (x - radius - 2), (int) (y - radius - 2),
 						(int) (x + radius + 2), (int) (y + radius + 2));
 				invalidate(mRect);
@@ -242,14 +272,14 @@ public class SketchView extends View implements OnTouchListener {
 		}
 
 		public void saveCurrentBitMap(String filename) {
-			if (!unsaved) {
+			if (!mUnsaved) {
 				return; //do nothing if no unsaved changes pending
 			}
 			try {
 				FileOutputStream out = ((Activity)getContext()).openFileOutput(filename,
 						Context.MODE_PRIVATE);
 				mBitmap.compress(Bitmap.CompressFormat.PNG, 99, out); //note PNG lossless
-				unsaved = false;
+				mUnsaved = false;
 				Log.i(TAG, "saved page:"+filename);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -262,7 +292,7 @@ public class SketchView extends View implements OnTouchListener {
 				Log.i(TAG, "decoded:"
 						+ loadedBM.getHeight());		
 				mCanvas.drawBitmap(loadedBM, 0, 0, null);
-				unsaved = false;
+				mUnsaved = false;
 				invalidate();
 			} else {
 				Log.e(TAG, "bitmap file not found!");
