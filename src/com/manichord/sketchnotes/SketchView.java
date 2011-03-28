@@ -156,7 +156,6 @@ public class SketchView extends View implements OnTouchListener {
 			return true;
 		}
 		
-		
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
@@ -179,8 +178,6 @@ public class SketchView extends View implements OnTouchListener {
 //			if (curH < h)
 //				curH = h;
 			
-			
-
 			createNewDrawingCanvasAndBitMap(w,h);
 			
 			drawPageGrid(w,h);
@@ -192,9 +189,8 @@ public class SketchView extends View implements OnTouchListener {
 			int curW = mBitmap != null ? mBitmap.getWidth() : 0;
 			int curH = mBitmap != null ? mBitmap.getHeight() : 0;
 			
-			createNewDrawingCanvasAndBitMap(curW, curH);
-			
-			createNewDrawingCanvasAndBitMap(curW, curH);
+			createNewDrawingCanvasAndBitMap(curW, curH);		
+			drawPageGrid(curW, curH);
 			invalidate();
 			
 		}

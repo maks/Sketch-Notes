@@ -20,7 +20,7 @@ public class SKNotes extends Activity {
 	private static final int PAGELIST_ID = Menu.FIRST + 1;
 
 	/** Menu ID for the command to Save current page */
-	private static final int SETTINGS_ID = Menu.FIRST + 3;
+	private static final int SETTINGS_ID = Menu.FIRST + 2;
 
 	protected static final String LOAD_FILENAME = "com.manichord.sketchnotes.load_filename";
 
@@ -36,9 +36,8 @@ public class SKNotes extends Activity {
 
 		super.onCreate(savedInstanceState);
 		
-		//sView = new SketchView(this);
-		//setContentView(sView);
 		setContentView(R.layout.main);
+		sView = (SketchView)findViewById(R.id.skview);
 				
 		Date now = new Date();
 		
@@ -92,7 +91,4 @@ public class SKNotes extends Activity {
 	public String getCurrentFileName() {
 		return mCurrentFileName;
 	}
-
-
-	
 }
