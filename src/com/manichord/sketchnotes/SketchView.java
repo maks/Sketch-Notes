@@ -77,7 +77,7 @@ public class SketchView extends View implements OnTouchListener {
 			mPenPainter.setColor(getResources().getColor(
 					R.color.pen_colour_bluepen));
 			mPenPainter.setStrokeWidth(3);
-			mPenPainter.setStyle(Style.FILL_AND_STROKE);
+			mPenPainter.setStyle(Style.STROKE);
 
 			// square graph paper:
 			Resources res = getResources();
@@ -114,27 +114,17 @@ public class SketchView extends View implements OnTouchListener {
 			float mCurX;
 			float mCurY;
 
-			// API level 9 and above supports "Major" property on event which
-			// gives
-			// the size of the touch area at the point of contact
-			// so for now we just hard code
-			//float TOUCH_AREA_SIZE = penWidth;
-
 			int action = event.getAction();
 			if (action != MotionEvent.ACTION_UP
 					&& action != MotionEvent.ACTION_CANCEL) {
-				mCurrentPath = null;
+				//Log.d(TAG, "PEN UP");
 			}
 			if (action == MotionEvent.ACTION_DOWN) {
 				//start recording points
-				Log.d(TAG, "new PATH");
 				mCurrentPath = new Path();
 				mCurrentPath.moveTo(event.getX(), event.getY());
-				//mCurrentPath.lineTo(event.getX(), event.getY());
 			}
 			if (action == MotionEvent.ACTION_MOVE) {
-				Log.d(TAG, "new MOVE");
-				
 				//start recording points
 				int N = event.getHistorySize();
 				int P = event.getPointerCount();
@@ -144,9 +134,9 @@ public class SketchView extends View implements OnTouchListener {
 						mCurY = event.getHistoricalY(j, i);
 						
 						if (mCurrentPath != null) {
-							Log.d(TAG, "new POINT"+mCurX+","+mCurY);
-							mCurrentPath.lineTo(mCurX, mCurY);
-							
+							mCurrentPath.lineTo(mCurX, mCurY);							
+						} else {
+							Log.e(TAG, "NO PATH TO ADD POINT"+mCurX+","+mCurY);							
 						}
 					}
 				}
@@ -159,10 +149,8 @@ public class SketchView extends View implements OnTouchListener {
 				if (mCurrentPath != null) {
 					mCurrentPath.lineTo(event.getX(), event.getY());	
 					mCanvas.drawPath(mCurrentPath, mPenPainter);
-					Log.d(TAG, "new POINT");
 					invalidate();
-				}
-				
+				}				
 			}
 			mUnsaved = true;
 			return true;
