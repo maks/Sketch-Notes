@@ -299,7 +299,6 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 					mEraserMode = true;
 					v.setBackgroundColor(selectedBg);
 					((View)v.getParent()).findViewById(R.id.penButton).setBackgroundColor(unselectedBg);
-					Log.d(TAG, "ERASER ON");
 					//Toast.makeText(getApplicationContext(), text, duration).show();
 					break;
 				
@@ -307,7 +306,6 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 					mEraserMode = false;
 					v.setBackgroundColor(selectedBg);
 					((View)v.getParent()).findViewById(R.id.eraserButton).setBackgroundColor(unselectedBg);
-					Log.d(TAG, "ERASER OFF");
 					break;
 			}
 		}
