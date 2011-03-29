@@ -6,7 +6,8 @@ h2. Gfx
 * "simple drawing program using android 2d api":http://marakana.com/tutorials/android/2d-graphics-example.html 
 * "simple drawing app from android samples":http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/graphics/TouchPaint.html 
 * "working with bitmaps article":http://www.higherpass.com/Android/Tutorials/Working-With-Images-In-Android/2/
-
+* "posting on howto set transparency when drawing":http://groups.google.com/group/android-developers/browse_thread/thread/5b0a498664b17aa0/e2548672a8294677?lnk=gst&q=How+to+paint+transparency#e2548672a8294677
+* "...and the example app for PortDuff XferModes":http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/graphics/Xfermodes.html
 
 h2. Design
 

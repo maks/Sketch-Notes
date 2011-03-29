@@ -38,6 +38,9 @@ public class SKNotes extends Activity {
 		
 		setContentView(R.layout.main);
 		sView = (SketchView)findViewById(R.id.skview);
+		
+		findViewById(R.id.eraserButton).setOnClickListener(sView);
+		findViewById(R.id.penButton).setOnClickListener(sView);
 				
 		Date now = new Date();
 		

@@ -12,19 +12,23 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 
-public class SketchView extends View implements OnTouchListener {
+public class SketchView extends View implements OnTouchListener, OnClickListener {
 
 		private static final String TAG = "SketchView";
 					
@@ -46,23 +50,24 @@ public class SketchView extends View implements OnTouchListener {
 		private final Paint mPagePainter;
 		private final Paint mGridPainter;
 		private final Paint mPenPainter;
-
+		private final Paint mEraserPainter;
+		
 		int width = 0;
 		int height = 0;
 		int pass = 0;
-		int xpos = 0;
-		int ypos = 0;
-		float penWidth = 0;
 		
 		private boolean mUnsaved = false;
-
+		private boolean mEraserMode = false;
+		private float mEraserWidth;
+		
+		
 		public SketchView(Context context) {
 			this(context, null);
 		}
 		
 		public SketchView(Context context, AttributeSet attrs) {
 			super(context, attrs);
-
+			
 			setFocusable(true);
 			
 			mPagePainter = new Paint();
@@ -76,16 +81,14 @@ public class SketchView extends View implements OnTouchListener {
 			mPenPainter = new Paint();
 			mPenPainter.setColor(getResources().getColor(
 					R.color.pen_colour_bluepen));
-			mPenPainter.setStrokeWidth(3);
+			mPenPainter.setStrokeWidth(getResources().getDimension(R.dimen.pen_size));
 			mPenPainter.setStyle(Style.STROKE);
 
-			// square graph paper:
-			Resources res = getResources();
-			xpos = Math.round(res.getDimension(R.dimen.grid_size));
-			ypos = Math.round(res.getDimension(R.dimen.grid_size));
-
-			penWidth = res.getDimension(R.dimen.pen_size);
+			mEraserPainter = new Paint();
+			mEraserPainter.setColor(Color.TRANSPARENT);
+			mEraserPainter.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 			
+			mEraserWidth = getResources().getDimension(R.dimen.pen_size);			
 			mLastSaveTime = (new Date()).getTime();
 		}
 
@@ -113,6 +116,8 @@ public class SketchView extends View implements OnTouchListener {
 
 			float mCurX;
 			float mCurY;
+			
+			ArrayList<Point> eraserpoints = new ArrayList<Point>();
 
 			int action = event.getAction();
 			if (action != MotionEvent.ACTION_UP
@@ -127,30 +132,36 @@ public class SketchView extends View implements OnTouchListener {
 			if (action == MotionEvent.ACTION_MOVE) {
 				//start recording points
 				int N = event.getHistorySize();
-				int P = event.getPointerCount();
+				int P = event.getPointerCount(); 
 				for (int i = 0; i < N; i++) {
-					for (int j = 0; j < P; j++) {
+					for (int j = 0; j < P; j++) { 
 						mCurX = event.getHistoricalX(j, i);
-						mCurY = event.getHistoricalY(j, i);
+						mCurY = event.getHistoricalY(j, i);	
 						
-						if (mCurrentPath != null) {
-							mCurrentPath.lineTo(mCurX, mCurY);							
-						} else {
-							Log.e(TAG, "NO PATH TO ADD POINT"+mCurX+","+mCurY);							
+						if (mEraserMode == true) {
+							eraserpoints.add(new Point(Math.round(mCurX), Math.round(mCurY)));
+						} else {												
+							if (mCurrentPath != null) {
+								mCurrentPath.lineTo(mCurX, mCurY);							
+							} else {
+								Log.e(TAG, "NO PATH TO ADD POINT"+mCurX+","+mCurY);							
+							}
 						}
 					}
 				}
-				// NO Multitouch for now
-//				for (int j = 0; j < P; j++) {
-//					mCurX = event.getX(j);
-//					mCurY = event.getY(j);
-//					mCurrentPath.lineTo(mCurX, mCurY);
-//				}
-				if (mCurrentPath != null) {
-					mCurrentPath.lineTo(event.getX(), event.getY());	
-					mCanvas.drawPath(mCurrentPath, mPenPainter);
-					invalidate();
-				}				
+				if (mEraserMode == true) {
+					for(Point i:eraserpoints) {
+						drawPoint(i.x, i.y, mEraserPainter);
+					}
+				} else {
+					if (mCurrentPath != null) {
+						mCurrentPath.lineTo(event.getX(), event.getY());	
+						mCanvas.drawPath(mCurrentPath, mPenPainter);
+						invalidate();
+					} else {
+						Log.e(TAG, "Missing CurrentPath object");
+					}
+				}								
 			}
 			mUnsaved = true;
 			return true;
@@ -191,8 +202,7 @@ public class SketchView extends View implements OnTouchListener {
 			
 			createNewDrawingCanvasAndBitMap(curW, curH);		
 			drawPageGrid(curW, curH);
-			invalidate();
-			
+			invalidate();			
 		}
 		
 		private void createNewDrawingCanvasAndBitMap(int w, int h) {
@@ -206,6 +216,11 @@ public class SketchView extends View implements OnTouchListener {
 		}
 
 		private void drawPageGrid(int w, int  h) {
+			// square graph paper:
+			Resources res = getResources();
+			int xpos = Math.round(res.getDimension(R.dimen.grid_size));
+			int ypos = Math.round(res.getDimension(R.dimen.grid_size));
+			
 			Bitmap newBackgroundBitmap = Bitmap.createBitmap(w, h,
 					Bitmap.Config.RGB_565);
 			Canvas newBackgroundCanvas = new Canvas();
@@ -234,21 +249,11 @@ public class SketchView extends View implements OnTouchListener {
 			}
 		}
 
-		private void drawPoint(float x, float y, float pressure, float width) {
-//			Log.i("TouchPaint", "Drawing: " + x + "x" + y + " p=" + pressure
-//					+ " width=" + width);
-			if (width < 1)
-				width = 1;
+		private void drawPoint(int x, int y, Paint pen) {
+			//Log.d(TAG, "DRAW POINT"+x+" +y");
 			if (mBitmap != null) {
-				float radius = width / 2;
-
-				// TODO: need to test on a device that supports pressure
-				// sensitive input
-				// int pressureLevel = (pressure == 0) ? 255 : (int)(pressure *
-				// 255);
-				// penPainter.setARGB(pressureLevel, 255, 0, 0);
-
-				mCanvas.drawCircle(x, y, radius, mPenPainter);
+				float radius = mEraserWidth;
+				mCanvas.drawCircle(x, y, radius, pen);
 				mRect.set((int) (x - radius - 2), (int) (y - radius - 2),
 						(int) (x + radius + 2), (int) (y + radius + 2));
 				invalidate(mRect);
@@ -280,6 +285,23 @@ public class SketchView extends View implements OnTouchListener {
 				invalidate();
 			} else {
 				Log.e(TAG, "bitmap file not found!");
+			}
+		}
+
+		@Override
+		public void onClick(View v) {
+			//handle button clicks for pen/pencolour/eraser
+			switch(v.getId()) {
+				case R.id.eraserButton: 
+					mEraserMode = true;
+					Log.d(TAG, "ERASER ON");
+					//Toast.makeText(getApplicationContext(), text, duration).show();
+					break;
+				
+				case R.id.penButton:
+					mEraserMode = false;
+					Log.d(TAG, "ERASER OFF");
+					break;
 			}
 		}
 	}
