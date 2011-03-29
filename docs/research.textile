@@ -19,6 +19,7 @@ h2. Existing Apps as examples
 * "the article that inspired this app":http://www.alistapart.com/articles/sketching-the-visual-thinking-power-tool/
 * "draft":http://37signals.com/draft
 * "penultimate":http://www.cocoabox.com/penultimate
+* "review showing limitations of capacitve screen+stylus":http://www.youtube.com/watch?v=9gjruoxBrpA
 
 h2. Andriod UI
 
