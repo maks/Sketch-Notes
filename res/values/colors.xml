@@ -4,5 +4,6 @@
 	<color name="grid_colour">#A4DDED</color>    
 	<color name="pen_colour_leadpencil">#2F4F4F</color>
     <color name="pen_colour_bluepen">#005db4</color>
-    <color name="pen_colour_selected_button">#2F4F4F</color>
+    <color name="selected_button_background">#FF2222</color>
+    <color name="unselected_button_background">#777777</color>
 </resources>

@@ -16,17 +16,19 @@
             android:layout_width="60dip"
             android:layout_height="wrap_content" 
             android:layout_weight="1"
-            android:background="@color/pen_colour_selected_button"
-            android:src="@drawable/draw_icon"
-            android:clickable="true"/>
+            android:background="@color/selected_button_background"
+            android:src="@drawable/draw_button"
+            android:clickable="true"
+            />
             
         <ImageButton android:id="@+id/eraserButton" 
             android:layout_width="60dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/page_colour"
-            android:src="@drawable/erase_icon"
-            android:clickable="true"/>
+            android:background="@color/unselected_button_background"
+            android:src="@drawable/eraser_button"
+            android:clickable="true"
+            />
     </LinearLayout>
     
     <view

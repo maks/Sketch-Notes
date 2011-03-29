@@ -291,15 +291,22 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 		@Override
 		public void onClick(View v) {
 			//handle button clicks for pen/pencolour/eraser
+			int selectedBg = getResources().getColor(R.color.selected_button_background);
+			int unselectedBg = getResources().getColor(R.color.unselected_button_background);
+			
 			switch(v.getId()) {
 				case R.id.eraserButton: 
 					mEraserMode = true;
+					v.setBackgroundColor(selectedBg);
+					((View)v.getParent()).findViewById(R.id.penButton).setBackgroundColor(unselectedBg);
 					Log.d(TAG, "ERASER ON");
 					//Toast.makeText(getApplicationContext(), text, duration).show();
 					break;
 				
 				case R.id.penButton:
 					mEraserMode = false;
+					v.setBackgroundColor(selectedBg);
+					((View)v.getParent()).findViewById(R.id.eraserButton).setBackgroundColor(unselectedBg);
 					Log.d(TAG, "ERASER OFF");
 					break;
 			}
