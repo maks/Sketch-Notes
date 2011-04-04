@@ -28,10 +28,7 @@ public class PageImageAdapter extends BaseAdapter {
 
     public PageImageAdapter(Context c) {
         mContext = c;
-        mBackgroundColor = mContext.getResources().getColor(R.color.page_colour);
-        Paint mPainter = new Paint();
-    	int bgColor = mContext.getResources().getColor(R.color.page_colour);
-        
+        mBackgroundColor = mContext.getResources().getColor(R.color.page_colour);       
     	getFilesList();
     }
 
@@ -55,10 +52,7 @@ public class PageImageAdapter extends BaseAdapter {
     	Bitmap thumbBM = mkThumb(position);
     	
         ImageView imageView;
-          
-        int THUMB_WIDTH = thumbBM.getWidth() / 4;
-        int THUMB_HEIGHT = thumbBM.getHeight() / 4;
-        
+                  
         if (convertView == null) {  // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
         } else {
@@ -83,8 +77,8 @@ public class PageImageAdapter extends BaseAdapter {
     }
     
     private Bitmap mkThumb(int position) {
-    	Log.e(TAG, "img file:"+mFileList[position].getName());    	
-    	//for explaination of why to use BMFactory options see 
+    	Log.e(TAG, "img file:"+getFileName(position));    	
+    	//for explanation of why to use BMFactory options see 
     	//http://stackoverflow.com/questions/477572/android-strange-out-of-memory-issue/823966#823966
     	
     	String filePath = mFileList[position].getAbsolutePath();
@@ -92,8 +86,7 @@ public class PageImageAdapter extends BaseAdapter {
     	BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
     	
-    	Canvas newCanvas = new Canvas();
-		BitmapFactory.decodeFile(filePath, opts);
+    	BitmapFactory.decodeFile(filePath, opts);
 		
 		 //The new size we want to scale to
         final double IMAGE_MAX_SIZE=250;
@@ -112,8 +105,8 @@ public class PageImageAdapter extends BaseAdapter {
 		Bitmap thumbBitMap = Bitmap.createBitmap(loadedBM.getWidth(), loadedBM.getHeight(),
 				Bitmap.Config.RGB_565);
 		
-		newCanvas.setBitmap(thumbBitMap);
-		
+		Canvas newCanvas = new Canvas();
+		newCanvas.setBitmap(thumbBitMap);		
 		thumbBitMap.eraseColor(mBackgroundColor);
 		newCanvas.drawBitmap(loadedBM, 0, 0, mPainter);
 
