@@ -211,6 +211,10 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			Canvas newCanvas = new Canvas();
 			newCanvas.setBitmap(newBitmap);
 			
+			if (mBitmap !=  null) {
+				mBitmap.recycle(); //tell android to clear up prev bitmap	
+			}
+			
 			mBitmap = newBitmap;
 			mCanvas = newCanvas;
 		}
@@ -308,5 +312,14 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 					((View)v.getParent()).findViewById(R.id.eraserButton).setBackgroundColor(unselectedBg);
 					break;
 			}
+		}
+
+		public void nullBitmaps() {
+			mCanvas = null;
+			mBitmap.recycle();
+			mBitmap = null;
+			mBackgroundCanvas = null;
+			mBackgroundBitmap.recycle();
+			mBackgroundBitmap = null;
 		}
 	}

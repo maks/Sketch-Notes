@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Debug;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import android.widget.ImageView;
 public class PageImageAdapter extends BaseAdapter {
 
 	private final String TAG = "PageImageAdapter";
+	
+	private final static int THUMB_SCALE_FACTOR = 4;
+	
 	private Context mContext;
 	private File[] mFileList;
 	private int mBackgroundColor;
@@ -43,19 +47,26 @@ public class PageImageAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return mFileList[position].hashCode();
     }
+    
+    @Override
+	public boolean hasStableIds() {
+		return true;
+	}
 
-    // create a new ImageView for each item referenced by the Adapter
+	// create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
+    	Log.d(TAG,"Page Adapter - "+SKNotes.getMemUsageString());
+    	
     	if (position == 0) {
     		getFilesList();
     	}
-    	Bitmap thumbBM = mkThumb(position);
-    	
+    	Bitmap thumbBM = mkThumb(position);    	
         ImageView imageView;
                   
         if (convertView == null) {  // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
         } else {
+        	Log.d(TAG, "NEW IMG VIEW");
             imageView = (ImageView) convertView;
         }
         
@@ -83,25 +94,11 @@ public class PageImageAdapter extends BaseAdapter {
     	
     	String filePath = mFileList[position].getAbsolutePath();
     	
-    	BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = true;
-    	
-    	BitmapFactory.decodeFile(filePath, opts);
-		
-		 //The new size we want to scale to
-        final double IMAGE_MAX_SIZE=250;
-		
-		int scale = 1;
-        if (opts.outHeight > IMAGE_MAX_SIZE || opts.outWidth > IMAGE_MAX_SIZE) {
-            scale = (int) Math.pow(2, (int) Math.round(Math.log(IMAGE_MAX_SIZE / (double) Math.max(opts.outHeight, opts.outWidth)) / Math.log(0.5)));
-        }
-
         //Decode with inSampleSize
         BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
+        o2.inSampleSize = THUMB_SCALE_FACTOR;
         Bitmap loadedBM = BitmapFactory.decodeFile(filePath, o2);
-        
-		
+        		
 		Bitmap thumbBitMap = Bitmap.createBitmap(loadedBM.getWidth(), loadedBM.getHeight(),
 				Bitmap.Config.RGB_565);
 		
@@ -110,6 +107,8 @@ public class PageImageAdapter extends BaseAdapter {
 		thumbBitMap.eraseColor(mBackgroundColor);
 		newCanvas.drawBitmap(loadedBM, 0, 0, mPainter);
 
+		loadedBM.recycle();
+		
 		return thumbBitMap;
     }
     

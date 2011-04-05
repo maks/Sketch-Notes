@@ -5,6 +5,7 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,8 +37,11 @@ public class SKNotes extends Activity {
 
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.main);
-		sView = (SketchView)findViewById(R.id.skview);
+		if (sView == null) {
+			setContentView(R.layout.main);
+			sView = (SketchView)findViewById(R.id.skview);
+			
+		}
 		
 		findViewById(R.id.eraserButton).setOnClickListener(sView);
 		findViewById(R.id.penButton).setOnClickListener(sView);
@@ -50,8 +54,12 @@ public class SKNotes extends Activity {
 		} else {				
 			mCurrentFileName = "skpage"+now.getTime()+".png";
 		}
+		
+    	Log.d(TAG," SKNotes - "+SKNotes.getMemUsageString());
 	}
 
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, CLEAR_ID, 0, "New");
@@ -89,9 +97,18 @@ public class SKNotes extends Activity {
 	protected void onPause() {
 		super.onPause();
 		sView.saveCurrentBitMap(mCurrentFileName);
+		sView.nullBitmaps();
+		System.gc();
+		Log.d(TAG, "SKNotes onPause:"+getMemUsageString());
 	}
 	
 	public String getCurrentFileName() {
 		return mCurrentFileName;
+	}
+
+	public static String getMemUsageString() {
+		int usedMegs = (int)(Debug.getNativeHeapAllocatedSize() / 1024L);
+    	String usedMegsString = String.format(" SKNotes Memory Used: %d KB", usedMegs);
+    	return usedMegsString;
 	}
 }
