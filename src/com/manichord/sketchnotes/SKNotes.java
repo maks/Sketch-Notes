@@ -37,25 +37,7 @@ public class SKNotes extends Activity {
 
 		super.onCreate(savedInstanceState);
 		
-		if (sView == null) {
-			setContentView(R.layout.main);
-			sView = (SketchView)findViewById(R.id.skview);
-			
-		}
-		
-		findViewById(R.id.eraserButton).setOnClickListener(sView);
-		findViewById(R.id.penButton).setOnClickListener(sView);
-				
-		Date now = new Date();
-		
-		String fileToLoad = getIntent().getStringExtra(LOAD_FILENAME);
-		if (fileToLoad != null && !"".equals(fileToLoad)) {
-			mCurrentFileName = fileToLoad;
-		} else {				
-			mCurrentFileName = "skpage"+now.getTime()+".png";
-		}
-		
-    	Log.d(TAG," SKNotes - "+SKNotes.getMemUsageString());
+		setupViews();
 	}
 
 	
@@ -102,6 +84,13 @@ public class SKNotes extends Activity {
 		Log.d(TAG, "SKNotes onPause:"+getMemUsageString());
 	}
 	
+	
+	@Override
+	protected void onResume() {
+		super.onResume();		
+		setupViews();
+	}
+
 	public String getCurrentFileName() {
 		return mCurrentFileName;
 	}
@@ -110,5 +99,25 @@ public class SKNotes extends Activity {
 		int usedMegs = (int)(Debug.getNativeHeapAllocatedSize() / 1024L);
     	String usedMegsString = String.format(" SKNotes Memory Used: %d KB", usedMegs);
     	return usedMegsString;
+	}
+	
+	private void setupViews() {
+		
+		setContentView(R.layout.main);
+		sView = (SketchView)findViewById(R.id.skview);			
+		
+		findViewById(R.id.eraserButton).setOnClickListener(sView);
+		findViewById(R.id.penButton).setOnClickListener(sView);
+				
+		Date now = new Date();
+		
+		String fileToLoad = getIntent().getStringExtra(LOAD_FILENAME);
+		if (fileToLoad != null && !"".equals(fileToLoad)) {
+			mCurrentFileName = fileToLoad;
+		} else {				
+			mCurrentFileName = "skpage"+now.getTime()+".png";
+		}
+		
+    	Log.d(TAG," SKNotes - "+SKNotes.getMemUsageString());
 	}
 }
