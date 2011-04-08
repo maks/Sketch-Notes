@@ -316,10 +316,14 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 
 		public void nullBitmaps() {
 			mCanvas = null;
-			mBitmap.recycle();
+			if (mBitmap != null) {
+				mBitmap.recycle();
+			}
 			mBitmap = null;
 			mBackgroundCanvas = null;
-			mBackgroundBitmap.recycle();
+			if (mBackgroundBitmap != null) {
+				mBackgroundBitmap.recycle();
+			}
 			mBackgroundBitmap = null;
 		}
 	}
