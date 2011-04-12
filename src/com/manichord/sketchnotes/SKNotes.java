@@ -56,6 +56,8 @@ public class SKNotes extends Activity {
 		switch (item.getItemId()) {
 		case CLEAR_ID:
 			if (sView != null) {
+				sView.saveCurrentBitMap(mCurrentFileName);
+				
 				Date now = new Date();
 				mCurrentFileName = "skpage"+now.getTime()+".png";
 				sView.clear();
@@ -65,6 +67,7 @@ public class SKNotes extends Activity {
 			return true;
 		case PAGELIST_ID:
 			Intent intent = new Intent(this, PagesList.class);
+			sView.saveCurrentBitMap(mCurrentFileName);
 			startActivity(intent);
 			return true;
 		case SETTINGS_ID:

@@ -27,6 +27,7 @@ public class PageImageAdapter extends BaseAdapter {
 	private File[] mFileList;
 	private int mBackgroundColor;
 	private Paint mPainter;
+	private int currentPageCount;
 
 	private Bitmap mDefaultBitMap;
 
@@ -38,7 +39,7 @@ public class PageImageAdapter extends BaseAdapter {
     }
 
     public int getCount() {    	
-    	return getFilesList();
+    	return currentPageCount;
     }
 
     public Object getItem(int position) {
@@ -77,7 +78,7 @@ public class PageImageAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private int getFilesList() {
+    private void getFilesList() {
     	File storeDir = mContext.getFilesDir();    	
     	
     	Log.d(TAG, "getting page files list...");
@@ -87,16 +88,19 @@ public class PageImageAdapter extends BaseAdapter {
     	} else {
     		Log.e(TAG, "invalid store dir:"+storeDir);
     	}
-    	return mFileList.length;
+    	currentPageCount = mFileList.length;
     }
     
 	void deletePage(int index) {
 		mFileList[index].delete();
+		getFilesList();
 		Log.i(TAG, "Deleted Page:" + mFileList[index].getName());
 	}
 	
 	void renamePage(int index, String nuName) {
-		//TODO
+		//TODO the actual rename
+		getFilesList();
+		Log.i(TAG, "ReNamed Page:" + mFileList[index].getName());
 	}
 
 	public String getFileName(int position) {
