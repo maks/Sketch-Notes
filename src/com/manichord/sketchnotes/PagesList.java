@@ -1,5 +1,7 @@
 package com.manichord.sketchnotes;
 
+import java.util.Date;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,7 +21,8 @@ import android.widget.GridView;
 public class PagesList extends Activity implements OnItemClickListener {
 
 	private static final String TAG = "PagesList";
-
+	
+	//==Pop up menu ==
 	/** Menu ID for the command to clear the window. */
 	private static final int RENAME_ID = Menu.FIRST;
 
@@ -28,6 +31,10 @@ public class PagesList extends Activity implements OnItemClickListener {
 	
 	/** Menu ID for the command to clear the window. */
 	private static final int TAG_ID = Menu.FIRST + 2;
+	//=====
+		
+	/** Menu ID for the command to create new sketch page. */
+	private static final int NEW_ID = Menu.FIRST + 3;
 
 	private PageImageAdapter mAdapter;
 	
@@ -49,6 +56,25 @@ public class PagesList extends Activity implements OnItemClickListener {
 			mView.setAdapter(mAdapter);
 			mView.setOnItemClickListener(this);
 			registerForContextMenu(mView);
+		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, NEW_ID, 0, "New");
+		
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case NEW_ID:
+			Intent intent = new Intent(this, SKNotes.class);
+			startActivity(intent);			
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -91,9 +117,11 @@ public class PagesList extends Activity implements OnItemClickListener {
 	}
 
 	private void populateMenu(Menu menu) {
-		menu.add(Menu.NONE, RENAME_ID, Menu.NONE, "Rename");
+		//TODO: implement rename function 
+		//menu.add(Menu.NONE, RENAME_ID, Menu.NONE, "Rename");
 		menu.add(Menu.NONE, DELETE_ID, Menu.NONE, "Delete");
-		//TODO: menu.add(Menu.NONE, TAG_ID, Menu.NONE, "Tag");
+		//TODO: implement tagging function 
+		//menu.add(Menu.NONE, TAG_ID, Menu.NONE, "Tag");
 		
 	}
 
