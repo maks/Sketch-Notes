@@ -92,9 +92,9 @@ public class PageImageAdapter extends BaseAdapter {
     }
     
 	void deletePage(int index) {
+		Log.i(TAG, "Deleted Page:" + mFileList[index].getName());
 		mFileList[index].delete();
 		getFilesList();
-		Log.i(TAG, "Deleted Page:" + mFileList[index].getName());
 	}
 	
 	void renamePage(int index, String nuName) {
