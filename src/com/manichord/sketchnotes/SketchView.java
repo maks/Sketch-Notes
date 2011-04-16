@@ -86,9 +86,10 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 
 			mEraserPainter = new Paint();
 			mEraserPainter.setColor(Color.TRANSPARENT);
+			mEraserPainter.setStrokeWidth(getResources().getDimension(R.dimen.eraser_size));
 			mEraserPainter.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 			
-			mEraserWidth = getResources().getDimension(R.dimen.pen_size);			
+			mEraserWidth = getResources().getDimension(R.dimen.eraser_size);			
 			mLastSaveTime = (new Date()).getTime();
 		}
 
@@ -149,19 +150,14 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 						}
 					}
 				}
-				if (mEraserMode == true) {
-					for(Point i:eraserpoints) {
-						drawPoint(i.x, i.y, mEraserPainter);
-					}
+								
+				if (mCurrentPath != null) {
+					mCurrentPath.lineTo(event.getX(), event.getY());	
+					mCanvas.drawPath(mCurrentPath, (mEraserMode == true ? mEraserPainter : mPenPainter));
+					invalidate();
 				} else {
-					if (mCurrentPath != null) {
-						mCurrentPath.lineTo(event.getX(), event.getY());	
-						mCanvas.drawPath(mCurrentPath, mPenPainter);
-						invalidate();
-					} else {
-						Log.e(TAG, "Missing CurrentPath object");
-					}
-				}								
+					Log.e(TAG, "Missing CurrentPath object");
+				}							
 			}
 			mUnsaved = true;
 			return true;
@@ -253,17 +249,6 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			}
 		}
 
-		private void drawPoint(int x, int y, Paint pen) {
-			//Log.d(TAG, "DRAW POINT"+x+" +y");
-			if (mBitmap != null) {
-				float radius = mEraserWidth;
-				mCanvas.drawCircle(x, y, radius, pen);
-				mRect.set((int) (x - radius - 2), (int) (y - radius - 2),
-						(int) (x + radius + 2), (int) (y + radius + 2));
-				invalidate(mRect);
-			}
-		}
-
 		public void saveCurrentBitMap(String filename) {
 			if (!mUnsaved) {
 				return; //do nothing if no unsaved changes pending
@@ -303,7 +288,6 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 					mEraserMode = true;
 					v.setBackgroundColor(selectedBg);
 					((View)v.getParent()).findViewById(R.id.penButton).setBackgroundColor(unselectedBg);
-					//Toast.makeText(getApplicationContext(), text, duration).show();
 					break;
 				
 				case R.id.penButton:

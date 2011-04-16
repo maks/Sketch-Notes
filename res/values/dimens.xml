@@ -1,4 +1,5 @@
 <resources>
     <dimen name="pen_size">0.5mm</dimen>
+    <dimen name="eraser_size">1.0mm</dimen>
     <dimen name="grid_size">4.5mm</dimen>
 </resources>
