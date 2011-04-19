@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Debug.MemoryInfo;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -99,9 +100,9 @@ public class SKNotes extends Activity {
 	}
 
 	public static String getMemUsageString() {
-		int usedMegs = (int)(Debug.getNativeHeapAllocatedSize() / 1024L);
-    	String usedMegsString = String.format(" SKNotes Memory Used: %d KB", usedMegs);
-    	return usedMegsString;
+		int usedNativeKbs = (int)(Debug.getNativeHeapAllocatedSize() / 1024L);
+		
+    	return String.format(" SKNotes Memory Used: %d KB", usedNativeKbs);
 	}
 	
 	private void setupViews() {

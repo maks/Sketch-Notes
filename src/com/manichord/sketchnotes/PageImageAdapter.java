@@ -2,7 +2,6 @@ package com.manichord.sketchnotes;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -30,11 +29,19 @@ public class PageImageAdapter extends BaseAdapter {
 	private int currentPageCount;
 
 	private Bitmap mDefaultBitMap;
-
+	private static BitmapFactory.Options mBitmapFactoryOpts;
+    	
+	static {
+		mBitmapFactoryOpts = new BitmapFactory.Options();
+		mBitmapFactoryOpts.inSampleSize = THUMB_SCALE_FACTOR;
+	}
+	
     public PageImageAdapter(Context c) {
         mContext = c;
+        
         mBackgroundColor = mContext.getResources().getColor(R.color.page_colour);       
-    	getFilesList();
+    	
+        getFilesList();
     	mDefaultBitMap = ((BitmapDrawable)mContext.getResources().getDrawable(R.drawable.default_thumb)).getBitmap();    	
     }
 
@@ -129,10 +136,8 @@ public class PageImageAdapter extends BaseAdapter {
 	    	
 	    	String filePath = currentfile.getAbsolutePath();
 	    	
-	        //Decode with inSampleSize
-	        BitmapFactory.Options o2 = new BitmapFactory.Options();
-	        o2.inSampleSize = THUMB_SCALE_FACTOR;
-	        Bitmap loadedBM = BitmapFactory.decodeFile(filePath, o2);
+	        //Decode with inSampleSize	        
+	        Bitmap loadedBM = BitmapFactory.decodeFile(filePath, mBitmapFactoryOpts);
 	        		
 			Bitmap thumbBitMap = Bitmap.createBitmap(loadedBM.getWidth(), loadedBM.getHeight(),
 					Bitmap.Config.RGB_565);
@@ -142,7 +147,10 @@ public class PageImageAdapter extends BaseAdapter {
 			thumbBitMap.eraseColor(mBackgroundColor);
 			newCanvas.drawBitmap(loadedBM, 0, 0, mPainter);
 			
-			loadedBM.recycle();			
+			loadedBM.recycle();
+			
+			Log.d(TAG, "MkThumb Aft Recycle "+SKNotes.getMemUsageString());
+			
 			return thumbBitMap;
 		}
 

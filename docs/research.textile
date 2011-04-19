@@ -14,7 +14,7 @@ h2. Gfx
 h2. Design
 
 * "non photo blue colour used for gridline":http://en.wikipedia.org/wiki/Non-photo_blue
-* "handy list of colours adn rgb values":http://en.wikipedia.org/wiki/List_of_colours
+* "handy list of colours and RGB values":http://en.wikipedia.org/wiki/List_of_colours
 * "open clipart library":http://www.openclipart.org/tags/paper?page=1
 * "notebook icon":http://www.openclipart.org/detail/100339
 
