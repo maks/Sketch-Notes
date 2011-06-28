@@ -8,5 +8,13 @@
 	android:entries="@array/penSizeList"
 	android:entryValues="@array/penSizeList" />
 
+<ListPreference
+    android:title="Page Background"
+    android:summary="Choose the type of ruling to use as the page background"
+    android:key="penSizePref"
+    android:defaultValue="medium"
+    android:entries="@array/pageRulingList"
+    android:entryValues="@array/pageRulingList" />
+
 </PreferenceScreen>
 

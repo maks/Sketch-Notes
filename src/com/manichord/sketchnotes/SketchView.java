@@ -261,6 +261,8 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 				mBackgroundCanvas.drawLine(0, i, width, i, mGridPainter);
 			}
 		}
+		
+		
 
 		public void saveCurrentBitMap(String filename) {
 			if (!mUnsaved) {
