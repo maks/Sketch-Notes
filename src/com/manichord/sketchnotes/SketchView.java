@@ -20,9 +20,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -83,18 +81,7 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			mPenPainter = new Paint();
 			mPenPainter.setColor(getResources().getColor(
 					R.color.pen_colour_bluepen));
-		
-			String pensizePref = PreferenceManager.getDefaultSharedPreferences(context).getString("penSizePref", "medium");
-			Log.d(TAG,"using pen size: "+pensizePref);
-			
-			float penSize = getResources().getDimension(R.dimen.pen_small);
-			if ("medium".equals(pensizePref)) {
-				penSize = getResources().getDimension(R.dimen.pen_medium);
-			} else if ("large".equals(pensizePref)) {
-				penSize = getResources().getDimension(R.dimen.pen_large);
-			}
-						
-			mPenPainter.setStrokeWidth(penSize);
+			mPenPainter.setStrokeWidth(getResources().getDimension(R.dimen.pen_size));
 			mPenPainter.setStyle(Style.STROKE);
 
 			mEraserPainter = new Paint();
@@ -261,8 +248,6 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 				mBackgroundCanvas.drawLine(0, i, width, i, mGridPainter);
 			}
 		}
-		
-		
 
 		public void saveCurrentBitMap(String filename) {
 			if (!mUnsaved) {

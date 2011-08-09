@@ -15,10 +15,6 @@
         <activity   android:name=".PagesList"
                     android:label="@string/pagelist_title">
         </activity>
-        
-        <activity android:name=".Prefs" android:label="@string/preferences_title">
-        </activity>
-        
 
     </application>
     <uses-sdk android:minSdkVersion="5" />

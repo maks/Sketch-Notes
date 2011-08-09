@@ -72,8 +72,8 @@ public class SKNotes extends Activity {
 			startActivity(intent);
 			return true;
 		case SETTINGS_ID:
-			startActivity(new Intent(this, Prefs.class));
-	        return true;
+			//TODO
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
