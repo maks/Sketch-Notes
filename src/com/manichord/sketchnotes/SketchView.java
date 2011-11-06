@@ -8,6 +8,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,7 +23,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -39,6 +39,8 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 		private long mLastSaveTime;
 		
 		private int SAVE_DELAY = 30 * 1000; //30sec
+		
+		private String mPageBackgroundType;
 		
 		private Bitmap mBitmap;
 		private Canvas mCanvas;
@@ -204,8 +206,8 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			
 			createNewDrawingCanvasAndBitMap(w,h);
 			
-			drawPageGrid(w,h);
-			
+			String[] pageRulingList = getResources().getStringArray(R.array.pageRulingList);
+			drawPageGridOrLines(w,h); 
 			loadBitMap(((SKNotes)getContext()).getCurrentFileName());
 		}
 
@@ -214,7 +216,7 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			int curH = mBitmap != null ? mBitmap.getHeight() : 0;
 			
 			createNewDrawingCanvasAndBitMap(curW, curH);		
-			drawPageGrid(curW, curH);
+			drawPageGridOrLines(curW, curH);
 			invalidate();			
 		}
 		
@@ -232,8 +234,8 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			mCanvas = newCanvas;
 		}
 
-		private void drawPageGrid(int w, int  h) {
-			// square graph paper:
+		private void drawPageGridOrLines(int w, int  h) {
+			
 			Resources res = getResources();
 			int xpos = Math.round(res.getDimension(R.dimen.grid_size));
 			int ypos = Math.round(res.getDimension(R.dimen.grid_size));
@@ -257,12 +259,22 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			Display display = ((Activity)getContext()).getWindowManager().getDefaultDisplay();
 			width = display.getWidth();// start
 			height = display.getHeight();// end
-
-			for (int i = 0; i < width; i += xpos) {
-				mBackgroundCanvas.drawLine(i, 0, i, height, mGridPainter);
+			
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+			String pageBackgroundPref = prefs.getString("pageBackgroundPref", "Grid");
+			
+			//lines only
+			if (!pageBackgroundPref.equals("None")) {
+				for (int i = 0; i < height; i += ypos) {
+					mBackgroundCanvas.drawLine(0, i, width, i, mGridPainter);
+				}			
 			}
-			for (int i = 0; i < height; i += ypos) {
-				mBackgroundCanvas.drawLine(0, i, width, i, mGridPainter);
+			
+			if (pageBackgroundPref.equals("Grid")) {
+				// add for square graph paper:				
+				for (int i = 0; i < width; i += xpos) {
+					mBackgroundCanvas.drawLine(i, 0, i, height, mGridPainter);
+				}
 			}
 		}
 		
@@ -314,6 +326,10 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 					v.setBackgroundColor(selectedBg);
 					((View)v.getParent()).findViewById(R.id.eraserButton).setBackgroundColor(unselectedBg);
 					break;
+					
+				case R.id.penColourButton:
+					
+					break;
 			}
 		}
 
@@ -329,4 +345,5 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			}
 			mBackgroundBitmap = null;
 		}
+		
 	}

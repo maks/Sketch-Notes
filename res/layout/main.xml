@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     >
     
-    <LinearLayout  
+    <LinearLayout  android:id="@+id/buttonBar" 
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="40dip"
@@ -37,6 +37,19 @@
             android:src="@drawable/eraser_button"
             android:clickable="true"
             />
+            
+        <ImageButton android:id="@+id/penColourButton" 
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="0sp"
+            android:layout_marginRight="5sp"
+            android:layout_marginBottom="0sp"
+            android:layout_marginLeft="5sp"
+            android:background="@color/unselected_button_background"
+            android:src="@drawable/pen_button"
+            android:clickable="true"
+            />
+            
     </LinearLayout>
     
     <view

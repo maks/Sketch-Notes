@@ -2,8 +2,11 @@
 <resources>
 	<color name="page_colour">#F5F5DC</color>
 	<color name="grid_colour">#A4DDED</color>    
-	<color name="pen_colour_leadpencil">#2F4F4F</color>
+	<color name="pen_colour_leadpencil_HB">#2F4F4F</color>
+	<color name="pen_colour_leadpencil_4H">#2F4F4F</color>
     <color name="pen_colour_bluepen">#005db4</color>
+    <color name="pen_colour_redpen">#005db4</color>
+    <color name="pen_colour_blackpen">#005db4</color>    
     <color name="selected_button_background">#FF2222</color>
     <color name="unselected_button_background">#777777</color>
 </resources>

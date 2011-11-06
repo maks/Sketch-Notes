@@ -30,6 +30,13 @@ h2. Andriod UI
 * "context menus":http://stackoverflow.com/questions/2453620/android-how-to-find-the-position-clicked-from-the-context-menu
 * "rotate emualtor":http://www.androidpeople.com/android-rotate-emulator/
 
+h3. Quick Actions
+
+* http://stackoverflow.com/questions/3451889/android-popup-menu
+* http://www.londatiga.net/it/how-to-create-quickaction-dialog-in-android/
+* http://code.google.com/p/simple-quickactions/
+
+
 h2. Devices
 
 h3. ZTE v9
