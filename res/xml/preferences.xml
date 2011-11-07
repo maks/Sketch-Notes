@@ -9,5 +9,13 @@
     android:entries="@array/pageRulingList"
     android:entryValues="@array/pageRulingList" />
 
+<ListPreference
+    android:title="Pen Thickness"
+    android:summary="Choose the tip size of pen or pencil"
+    android:key="penSizePref"
+    android:defaultValue="pen_medium"
+    android:entries="@array/penThicknessList"
+    android:entryValues="@array/penThicknessDimenList" />
+
 </PreferenceScreen>
 

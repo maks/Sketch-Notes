@@ -5,4 +5,16 @@
         <item>Lines</item>
         <item>None</item>
     </string-array>
+    
+    <string-array name="penThicknessList">
+	    <item>Small (0.5mm)</item>
+	    <item>Medium (0.7mm)</item>
+	    <item>Large (0.9mm)</item>
+    </string-array>
+    
+    <string-array name="penThicknessDimenList">
+	    <item>pen_small</item>
+	    <item>pen_medium</item>
+	    <item>pen_large</item>
+    </string-array>
 </resources>

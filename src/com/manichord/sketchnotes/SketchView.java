@@ -77,8 +77,8 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			
 			setFocusable(true);
 			
-			String pensizePref = PreferenceManager.getDefaultSharedPreferences(context).getString("penSizePref", "medium");
-			Log.d(TAG,"sview init using pen size: "+pensizePref);
+			String penSizePref = PreferenceManager.getDefaultSharedPreferences(context).getString("penSizePref", "medium");
+			Log.d(TAG,"sview init using pen size: "+penSizePref);
 			
 			Integer penColour = PreferenceManager.getDefaultSharedPreferences(context).getInt("penColour", R.color.blue_pen);
 			Log.d(TAG,"sview init using pen colour: "+penColour);
@@ -92,15 +92,15 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			mGridPainter.setStyle(Style.STROKE);
 
 			mPenPainter = new Paint();
-			mPenPainter.setColor(penColour);
-		
+			mPenPainter.setColor(penColour);		
 			
-			float penSize = getResources().getDimension(R.dimen.pen_small);
-			if ("medium".equals(pensizePref)) {
-				penSize = getResources().getDimension(R.dimen.pen_medium);
-			} else if ("large".equals(pensizePref)) {
-				penSize = getResources().getDimension(R.dimen.pen_large);
-			}
+			int penSizeIdentifier = getResources().getIdentifier(penSizePref, 
+					"dimen", 
+					getContext().getPackageName());
+			
+			Log.d(TAG, penSizePref+"-> got IDENT:"+penSizeIdentifier);
+			
+			float penSize = getResources().getDimension(penSizeIdentifier);
 						
 			mPenPainter.setStrokeWidth(penSize);
 			mPenPainter.setStyle(Style.STROKE);
