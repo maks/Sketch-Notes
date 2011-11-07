@@ -100,7 +100,10 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			
 			Log.d(TAG, penSizePref+"-> got IDENT:"+penSizeIdentifier);
 			
-			float penSize = getResources().getDimension(penSizeIdentifier);
+			float penSize = getResources().getDimension(R.dimen.pen_medium);
+			if (penSizeIdentifier != 0) {
+				penSize = getResources().getDimension(penSizeIdentifier);
+			}
 						
 			mPenPainter.setStrokeWidth(penSize);
 			mPenPainter.setStyle(Style.STROKE);
