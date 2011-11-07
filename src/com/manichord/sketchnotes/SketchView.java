@@ -186,7 +186,7 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 						mCurY = event.getHistoricalY(j, i);	
 						
 						if (mEraserMode == true) {
-							if (eraserpoints == null) {
+							if (eraserpoints != null) {
 								eraserpoints.add(new Point(Math.round(mCurX), Math.round(mCurY)));
 							} else {
 								Log.e(TAG, "no eraserpoints array defined, skipping adding erase point");
