@@ -131,7 +131,7 @@ public class SKNotes extends Activity {
 
 		this.colourMenuButton = (ImageButton) this.findViewById(R.id.penColourButton);
 		this.colourMenuButton.setOnClickListener(new View.OnClickListener() {
-			@Override
+			
 			public void onClick(View v) {
 				ColoursPopupWindow dw = new ColoursPopupWindow(v, sView);
 				dw.showLikePopDownMenu();
@@ -190,7 +190,7 @@ public class SKNotes extends Activity {
 			this.setContentView(root);
 		}
 
-		@Override
+		
 		public void onClick(View v) {
 			// we'll just display a simple toast on a button click
 			Button b = (Button) v;

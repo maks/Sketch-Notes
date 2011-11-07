@@ -125,7 +125,7 @@ public class PagesList extends Activity implements OnItemClickListener {
 		
 	}
 
-	@Override
+	
 	public void onItemClick(AdapterView<?> parent, View v,
 			int position, long id) {
 		Log.e(TAG, "pos:" + position);

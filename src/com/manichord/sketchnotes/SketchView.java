@@ -214,7 +214,7 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 		}
 		
 
-		@Override
+		
 		public boolean onTouch(View v, MotionEvent event) {
 			return false;
 		}
@@ -339,7 +339,7 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			}
 		}
 
-		@Override
+		
 		public void onClick(View v) {
 			//handle button clicks for pen/pencolour/eraser
 			int selectedBg = getResources().getColor(R.color.selected_button_background);

@@ -42,7 +42,7 @@ public class BetterPopupWindow {
                 // when a touch even happens outside of the window
                 // make the window go away
                 this.window.setTouchInterceptor(new OnTouchListener() {
-                        @Override
+                        
                         public boolean onTouch(View v, MotionEvent event) {
                                 if(event.getAction() == MotionEvent.ACTION_OUTSIDE) {
                                         BetterPopupWindow.this.window.dismiss();
