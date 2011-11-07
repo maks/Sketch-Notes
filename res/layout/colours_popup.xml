@@ -5,54 +5,90 @@
 	android:layout_height="wrap_content"
 	android:background="@android:drawable/alert_light_frame"
 >
-	<TableRow>
+	<TableRow>	    
 		<Button
-			android:layout_height="wrap_content"
+		    android:background="@drawable/hb_pencil_button"
 			android:layout_weight="1"
 			android:id="@+id/one"
-			android:text="   "
+			android:text="HB Pencil"
+			android:textColor="#FFF"
 			android:minWidth="80dp"
 			android:minHeight="80dp"
-			android:background="@color/pen_colour_leadpencil_HB"
-			 />
+			
+			android:layout_marginTop="2dp"
+			android:layout_marginRight="2dp"
+			android:layout_marginBottom="2dp"
+			android:layout_marginLeft="2dp"
+		/>
 		<Button
-			android:layout_height="wrap_content"
+		    android:background="@drawable/black_pen_button"
 			android:layout_weight="1"
 			android:id="@+id/two"
-			android:text="Two"
+			android:text="Black Pen"
+			android:textColor="#FFF"
 			android:minWidth="80dp"
 			android:minHeight="80dp"
+			
+			android:layout_marginTop="2dp"
+			android:layout_marginRight="2dp"
+			android:layout_marginBottom="2dp"
+			android:layout_marginLeft="3dp"
 			 />
 		<Button
-			android:layout_height="wrap_content"
+			android:background="@drawable/blue_pen_button"
 			android:layout_weight="1"
-			android:id="@+id/three"
-			android:text="Three"
+			android:id="@+id/two"
+			android:text="Blue Pen"
+			android:textColor="#FFF"
 			android:minWidth="80dp"
 			android:minHeight="80dp"
+			
+			android:layout_marginTop="2dp"
+			android:layout_marginRight="2dp"
+			android:layout_marginBottom="2dp"
+			android:layout_marginLeft="3dp"
 			 />
 	</TableRow>
 	<TableRow>
 		<Button
-			android:layout_height="wrap_content"
+			android:background="@drawable/h4_pencil_button"
 			android:layout_weight="1"
-			android:id="@+id/four"
-			android:text="Four"
+			android:id="@+id/one"
+			android:text="H4 Pencil"
+			android:textColor="#FFF"
+			android:minWidth="80dp"
 			android:minHeight="80dp"
+			
+			android:layout_marginTop="2dp"
+			android:layout_marginRight="2dp"
+			android:layout_marginBottom="2dp"
+			android:layout_marginLeft="2dp"
 			 />
 		<Button
-			android:layout_height="wrap_content"
+			android:background="@drawable/red_pen_button"
 			android:layout_weight="1"
-			android:id="@+id/five"
-			android:text="Five"
+			android:id="@+id/one"
+			android:text="Red Pen"
+			android:minWidth="80dp"
 			android:minHeight="80dp"
+			
+			android:layout_marginTop="2dp"
+			android:layout_marginRight="2dp"
+			android:layout_marginBottom="2dp"
+			android:layout_marginLeft="2dp"
 			 />
 		<Button
-			android:layout_height="wrap_content"
+			android:background="@drawable/yellow_hl_button"
 			android:layout_weight="1"
-			android:id="@+id/six"
-			android:text="Six"
+			android:id="@+id/one"
+			android:text="Yellow HL"
+			android:minWidth="80dp"
 			android:minHeight="80dp"
+			
+			android:layout_marginTop="2dp"
+			android:layout_marginRight="2dp"
+			android:layout_marginBottom="2dp"
+			android:layout_marginLeft="2dp"
 			 />
 	</TableRow>
 </TableLayout>

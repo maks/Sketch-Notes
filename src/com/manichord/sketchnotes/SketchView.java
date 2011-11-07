@@ -5,10 +5,13 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -74,6 +77,12 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			
 			setFocusable(true);
 			
+			String pensizePref = PreferenceManager.getDefaultSharedPreferences(context).getString("penSizePref", "medium");
+			Log.d(TAG,"sview init using pen size: "+pensizePref);
+			
+			Integer penColour = PreferenceManager.getDefaultSharedPreferences(context).getInt("penColour", R.color.blue_pen);
+			Log.d(TAG,"sview init using pen colour: "+penColour);
+			
 			mPagePainter = new Paint();
 			mPagePainter.setAntiAlias(true);
 			mPagePainter.setColor(getResources().getColor(R.color.page_colour));
@@ -83,11 +92,8 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			mGridPainter.setStyle(Style.STROKE);
 
 			mPenPainter = new Paint();
-			mPenPainter.setColor(getResources().getColor(
-					R.color.pen_colour_bluepen));
+			mPenPainter.setColor(penColour);
 		
-			String pensizePref = PreferenceManager.getDefaultSharedPreferences(context).getString("penSizePref", "medium");
-			Log.d(TAG,"using pen size: "+pensizePref);
 			
 			float penSize = getResources().getDimension(R.dimen.pen_small);
 			if ("medium".equals(pensizePref)) {
@@ -106,6 +112,28 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
 			
 			mEraserWidth = getResources().getDimension(R.dimen.eraser_size);			
 			mLastSaveTime = (new Date()).getTime();
+		}
+
+		public String getCurrentPenColour() {
+			return "TODO";
+		}
+
+		public void setCurrentPenColour(String penColourname) {
+			String colourIdentName = penColourname.toLowerCase().replace(" ", "_");
+			int colourIdentifier = getResources().getIdentifier(colourIdentName, 
+					"color", 
+					getContext().getPackageName());
+			
+			Log.d(TAG, colourIdentName+"-> got IDENT:"+colourIdentifier);
+			if (colourIdentifier != 0) {
+				int penColour = getResources().getColor(colourIdentifier);
+				Editor ed = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+				ed.putInt("penColour", new Integer(penColour));
+				ed.commit();
+				mPenPainter.setColor(penColour);
+			} else {
+				Log.d(TAG, "INVALID colourname:"+ colourIdentName+"-> got IDENT:"+colourIdentifier);
+			}
 		}
 
 		@Override

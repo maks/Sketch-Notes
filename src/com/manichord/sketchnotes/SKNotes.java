@@ -5,10 +5,8 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Debug;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -121,7 +119,7 @@ public class SKNotes extends Activity {
 				
 		findViewById(R.id.eraserButton).setOnClickListener(sView);
 		findViewById(R.id.penButton).setOnClickListener(sView);
-
+				
 		Date now = new Date();
 
 		String fileToLoad = getIntent().getStringExtra(LOAD_FILENAME);
@@ -135,7 +133,7 @@ public class SKNotes extends Activity {
 		this.colourMenuButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ColoursPopupWindow dw = new ColoursPopupWindow(v);
+				ColoursPopupWindow dw = new ColoursPopupWindow(v, sView);
 				dw.showLikePopDownMenu();
 			}
 		});
@@ -153,8 +151,13 @@ public class SKNotes extends Activity {
 	 */
 	private static class ColoursPopupWindow extends BetterPopupWindow implements
 			OnClickListener {
-		public ColoursPopupWindow(View anchor) {
+		
+		//ref to view used to set current pen/pencil drawing colour
+		private SketchView sView;
+		
+		public ColoursPopupWindow(View anchor, SketchView view) {
 			super(anchor);
+			this.sView = view;
 		}
 
 		@Override
@@ -193,6 +196,8 @@ public class SKNotes extends Activity {
 			Button b = (Button) v;
 			Toast.makeText(this.anchor.getContext(), b.getText(),
 					Toast.LENGTH_SHORT).show();
+			
+			sView.setCurrentPenColour(b.getText().toString());
 			this.dismiss();
 		}
 	}
