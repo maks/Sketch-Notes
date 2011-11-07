@@ -2,8 +2,8 @@
 <resources>
 	<color name="page_colour">#F5F5DC</color>
 	<color name="grid_colour">#A4DDED</color>    
-	<color name="hb_pencil">#2F4F4F</color>
-	<color name="h4_pencil">#2F4F4F</color>
+	<color name="hb_pencil">#555</color>
+	<color name="h4_pencil">#AAA</color>
     <color name="blue_pen">#005db4</color>
     <color name="red_pen">#ff0000</color>
     <color name="yellow_hl">#ffff00</color>

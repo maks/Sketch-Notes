@@ -17,6 +17,7 @@ h2. Design
 * "handy list of colours and RGB values":http://en.wikipedia.org/wiki/List_of_colours
 * "open clipart library":http://www.openclipart.org/tags/paper?page=1
 * "notebook icon":http://www.openclipart.org/detail/100339
+* "wikipedia pencil rgb":http://en.wikipedia.org/wiki/Pencil#Grading_and_classification
 
 h2. Existing Apps as examples
 
