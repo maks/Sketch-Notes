@@ -93,12 +93,13 @@ public class SKNotes extends Activity {
         sView.saveCurrentBitMap(mCurrentFileName);
         sView.nullBitmaps();
         System.gc();
-        Log.d(TAG, "SKNotes onPause:" + getMemUsageString());
+        Log.d(TAG, "SKNotes onPause:"+mCurrentFileName+" mem:" + getMemUsageString());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "SKNotes onResume:"+mCurrentFileName+" mem:" + getMemUsageString());
         setupViews();
     }
 
@@ -123,10 +124,17 @@ public class SKNotes extends Activity {
         Date now = new Date();
 
         String fileToLoad = getIntent().getStringExtra(LOAD_FILENAME);
+        getIntent().removeExtra(LOAD_FILENAME);//clear intent
         if (fileToLoad != null && !"".equals(fileToLoad)) {
+        	Log.d(TAG, "file from Intent filename:"+fileToLoad);
             mCurrentFileName = fileToLoad;
         } else {
-            mCurrentFileName = "skpage" + now.getTime() + ".png";
+        	if (mCurrentFileName != null) {
+        		Log.d(TAG, "have current filename:"+mCurrentFileName);
+        	} else {        		
+        		mCurrentFileName = "skpage" + now.getTime() + ".png";
+        		Log.d(TAG, "NEW filename:"+mCurrentFileName);
+        	}
         }
 
         this.colourMenuButton = (ImageButton) this.findViewById(R.id.penColourButton);
