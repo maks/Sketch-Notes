@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.manichord.sketchnotes"
-      android:versionCode="2"
-      android:versionName="1.1">
-    <application android:icon="@drawable/notebook_icon" android:label="@string/app_name">
+      android:versionCode="3"
+      android:versionName="1.2">
+    <application 
+    	android:icon="@drawable/notebook_icon" 
+    	android:label="@string/app_name"
+    	android:hardwareAccelerated="true"
+    	>
         <activity android:name=".SKNotes"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait">
@@ -15,8 +19,11 @@
         <activity   android:name=".PagesList"
                     android:label="@string/pagelist_title">
         </activity>
-
+        <activity 
+        	android:name=".SKNPrefs" 
+        	android:label="@string/preferences_title">
+        </activity>
     </application>
-    <uses-sdk android:minSdkVersion="5" />
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="12"/>
 
 </manifest> 

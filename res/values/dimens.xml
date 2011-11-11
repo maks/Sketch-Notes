@@ -1,5 +1,8 @@
 <resources>
-    <dimen name="pen_size">0.5mm</dimen>
+    <dimen name="pen_small">0.5mm</dimen>
+    <dimen name="pen_medium">0.7mm</dimen>
+    <dimen name="pen_large">0.9mm</dimen>
+    <dimen name="hl_thick">2.0mm</dimen>
     <dimen name="eraser_size">1.0mm</dimen>
     <dimen name="grid_size">4.5mm</dimen>
 </resources>
