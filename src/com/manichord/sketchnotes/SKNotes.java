@@ -1,10 +1,17 @@
 package com.manichord.sketchnotes;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
@@ -32,6 +39,9 @@ public class SKNotes extends Activity {
     /** Menu ID for the command to Save current page */
     private static final int SETTINGS_ID = Menu.FIRST + 2;
 
+    /** Menu ID for the command to Save current page */
+    private static final int SHARE_ID = Menu.FIRST + 3;
+
     protected static final String LOAD_FILENAME = "com.manichord.sketchnotes.load_filename";
 
     /** The view responsible for drawing the window. */
@@ -56,6 +66,7 @@ public class SKNotes extends Activity {
         menu.add(0, CLEAR_ID, 0, "New");
         menu.add(0, PAGELIST_ID, 0, "Pages");
         menu.add(0, SETTINGS_ID, 0, "Settings");
+        menu.add(0, SHARE_ID, 0, "Share");
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -82,8 +93,78 @@ public class SKNotes extends Activity {
         case SETTINGS_ID:
             startActivity(new Intent(this, SKNPrefs.class));
             return true;
+        case SHARE_ID:
+            shareSketch();
+            return true;
         default:
             return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void shareSketch() {
+        // make sure current version is saved
+        sView.saveCurrentBitMap(mCurrentFileName);
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        File extFile = new File(getShareDir(), mCurrentFileName);
+        FileInputStream internalFile = null;
+        try {
+            internalFile = getApplicationContext().openFileInput(
+                    mCurrentFileName);
+            copyToFile(internalFile, extFile);
+            Uri sketchUri = Uri.fromFile(extFile);
+            sharingIntent.setType("image/png");
+            sharingIntent.putExtra(Intent.EXTRA_STREAM, sketchUri);
+            startActivity(Intent.createChooser(sharingIntent,
+                    "Share Sketch Using..."));
+        } catch (IOException e) {
+            Log.e(TAG, "error sharing " + mCurrentFileName, e);
+        } finally {
+            if (internalFile != null) {
+                try {
+                    internalFile.close();
+                } catch (IOException e) {
+                    // can't do anything about this
+                }
+            }
+        }
+    }
+
+    private File getShareDir() {
+        File dir = new File(getExternalCacheDir(), "share");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return dir;
+    }
+
+    /**
+     * Copies src file to dst file. If the dst file does not exist, it will be
+     * created.
+     * 
+     * @param src
+     * @param dst
+     * @throws IOException
+     */
+    public static void copyToFile(InputStream src, File dst)
+            throws IOException {
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(dst);
+
+            // Transfer bytes from in to out
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = src.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                // can't do anything about this
+            }
         }
     }
 
