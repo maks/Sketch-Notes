@@ -1,2 +1,12 @@
-/bin
-/gen
+
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+/.idea/
+.DS_Store
+/build
+/captures
+/**/build
+/**/*.iml
+

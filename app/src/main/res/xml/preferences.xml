@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+<ListPreference
+    android:title="Page Background"
+    android:summary="Choose the type of ruling to use as the page background"
+    android:key="pageBackgroundPref"
+    android:defaultValue="Grid"
+    android:entries="@array/pageRulingList"
+    android:entryValues="@array/pageRulingList" />
+
+<ListPreference
+    android:title="Pen Thickness"
+    android:summary="Choose the tip size of pen or pencil"
+    android:key="penSizePref"
+    android:defaultValue="pen_medium"
+    android:entries="@array/penThicknessList"
+    android:entryValues="@array/penThicknessDimenList" />
+
+</PreferenceScreen>
+

@@ -1,0 +1,122 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* .gitignore
+* .idea/
+* .idea/.name
+* .idea/compiler.xml
+* .idea/copyright/
+* .idea/copyright/profiles_settings.xml
+* .idea/encodings.xml
+* .idea/misc.xml
+* .idea/workspace.xml
+* README.textile
+* app/
+* app/build.gradle
+* app/src/
+* app/src/main/
+* app/src/main/AndroidManifest.xml
+* app/src/main/java/
+* app/src/main/java/com/
+* app/src/main/java/com/manichord/
+* app/src/main/java/com/manichord/sketchnotes/
+* app/src/main/java/com/manichord/sketchnotes/BetterPopupWindow.java
+* app/src/main/java/com/manichord/sketchnotes/PageImageAdapter.java
+* app/src/main/java/com/manichord/sketchnotes/PagesList.java
+* app/src/main/java/com/manichord/sketchnotes/SKNPrefs.java
+* app/src/main/java/com/manichord/sketchnotes/SKNotes.java
+* app/src/main/java/com/manichord/sketchnotes/SketchView.java
+* app/src/main/res/
+* app/src/main/res/anim/
+* app/src/main/res/anim/grow_from_bottom.xml
+* app/src/main/res/anim/grow_from_top.xml
+* app/src/main/res/anim/grow_from_topleft_to_bottomright.xml
+* app/src/main/res/anim/shrink_from_bottom.xml
+* app/src/main/res/anim/shrink_from_bottomright_to_topleft.xml
+* app/src/main/res/anim/shrink_from_top.xml
+* app/src/main/res/drawable-hdpi/
+* app/src/main/res/drawable-hdpi/black_pen_button.xml
+* app/src/main/res/drawable-hdpi/blue_pen_button.xml
+* app/src/main/res/drawable-hdpi/default_thumb.png
+* app/src/main/res/drawable-hdpi/h4_pencil_button.xml
+* app/src/main/res/drawable-hdpi/hb_pencil_button.xml
+* app/src/main/res/drawable-hdpi/icon.png
+* app/src/main/res/drawable-hdpi/notebook_icon.png
+* app/src/main/res/drawable-hdpi/red_pen_button.xml
+* app/src/main/res/drawable-hdpi/yellow_hl_button.xml
+* app/src/main/res/drawable-ldpi/
+* app/src/main/res/drawable-ldpi/icon.png
+* app/src/main/res/drawable-ldpi/notebook_icon.png
+* app/src/main/res/drawable-mdpi/
+* app/src/main/res/drawable-mdpi/draw_button.png
+* app/src/main/res/drawable-mdpi/eraser_button.png
+* app/src/main/res/drawable-mdpi/icon.png
+* app/src/main/res/drawable-mdpi/notebook_icon.png
+* app/src/main/res/drawable-mdpi/pen_button.png
+* app/src/main/res/layout-land/
+* app/src/main/res/layout-land/pages.xml
+* app/src/main/res/layout/
+* app/src/main/res/layout/colours_popup.xml
+* app/src/main/res/layout/main.xml
+* app/src/main/res/layout/pages.xml
+* app/src/main/res/values/
+* app/src/main/res/values/colors.xml
+* app/src/main/res/values/dimens.xml
+* app/src/main/res/values/strings.xml
+* app/src/main/res/values/styles.xml
+* app/src/main/res/values/values.xml
+* app/src/main/res/xml/
+* app/src/main/res/xml/preferences.xml
+* app/src/main/res/xml/settings.xml
+* build.gradle
+* docs/
+* docs/app-icon-512.png
+* docs/app-icon.svg
+* docs/draw-icon.svg
+* docs/draw_icon.png
+* docs/erase-icon.svg
+* docs/erase_icon.png
+* docs/eraser-pen-icons.svg
+* docs/notebook_black.svg
+* docs/notebook_icon.png
+* docs/pen.svg
+* docs/research.textile
+* docs/screenshot1.png
+* docs/screenshot2.png
+* gradle/
+* gradle/wrapper/
+* gradle/wrapper/gradle-wrapper.jar
+* gradle/wrapper/gradle-wrapper.properties
+* gradlew
+* gradlew.bat
+* settings.gradle
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app/src/main/AndroidManifest.xml
+* res/ => app/src/main/res/
+* src/ => app/src/main/java/
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

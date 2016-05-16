@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="page_colour">#F5F5DC</color>
+	<color name="grid_colour">#A4DDED</color>    
+	<color name="hb_pencil">#555</color>
+	<color name="h4_pencil">#AAA</color>
+    <color name="blue_pen">#005db4</color>
+    <color name="red_pen">#ff0000</color>
+    <color name="yellow_hl">#ffff00</color>
+    <color name="black_pen">#111111</color>    
+    <color name="selected_button_background">#FF2222</color>
+    <color name="unselected_button_background">#777777</color>
+</resources>
