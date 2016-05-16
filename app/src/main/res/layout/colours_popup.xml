@@ -9,7 +9,6 @@
 		<Button
 		    android:background="@drawable/hb_pencil_button"
 			android:layout_weight="1"
-			android:id="@+id/one"
 			android:text="HB Pencil"
 			android:textColor="#FFF"
 			android:minWidth="80dp"
@@ -23,7 +22,6 @@
 		<Button
 		    android:background="@drawable/black_pen_button"
 			android:layout_weight="1"
-			android:id="@+id/two"
 			android:text="Black Pen"
 			android:textColor="#FFF"
 			android:minWidth="80dp"
@@ -37,7 +35,7 @@
 		<Button
 			android:background="@drawable/blue_pen_button"
 			android:layout_weight="1"
-			android:id="@+id/two"
+			android:id="@+id/three"
 			android:text="Blue Pen"
 			android:textColor="#FFF"
 			android:minWidth="80dp"
@@ -53,7 +51,6 @@
 		<Button
 			android:background="@drawable/h4_pencil_button"
 			android:layout_weight="1"
-			android:id="@+id/one"
 			android:text="H4 Pencil"
 			android:textColor="#FFF"
 			android:minWidth="80dp"
@@ -67,7 +64,6 @@
 		<Button
 			android:background="@drawable/red_pen_button"
 			android:layout_weight="1"
-			android:id="@+id/one"
 			android:text="Red Pen"
 			android:minWidth="80dp"
 			android:minHeight="80dp"
@@ -80,7 +76,6 @@
 		<Button
 			android:background="@drawable/yellow_hl_button"
 			android:layout_weight="1"
-			android:id="@+id/one"
 			android:text="Yellow HL"
 			android:minWidth="80dp"
 			android:minHeight="80dp"
