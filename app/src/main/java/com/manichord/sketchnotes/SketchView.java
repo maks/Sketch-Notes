@@ -1,11 +1,5 @@
 package com.manichord.sketchnotes;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,11 +24,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+
 public class SketchView extends View implements OnTouchListener, OnClickListener {
 
         private static final String TAG = "SketchView";
-
-        List<Point> points = new ArrayList<Point>();
 
         private long mLastSaveTime;
 
@@ -106,10 +103,6 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
             mEraserPainter.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 
             mLastSaveTime = (new Date()).getTime();
-        }
-
-        public String getCurrentPenColour() {
-            return "TODO";
         }
 
         public void setCurrentPenColour(String penColourname) {

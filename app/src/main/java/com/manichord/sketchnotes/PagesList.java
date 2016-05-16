@@ -1,13 +1,8 @@
 package com.manichord.sketchnotes;
 
-import java.util.Date;
-
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
