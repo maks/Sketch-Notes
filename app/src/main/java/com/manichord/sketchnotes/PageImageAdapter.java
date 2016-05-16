@@ -138,20 +138,23 @@ public class PageImageAdapter extends BaseAdapter {
 	    	
 	        //Decode with inSampleSize	        
 	        Bitmap loadedBM = BitmapFactory.decodeFile(filePath, mBitmapFactoryOpts);
-	        		
-			Bitmap thumbBitMap = Bitmap.createBitmap(loadedBM.getWidth(), loadedBM.getHeight(),
-					Bitmap.Config.RGB_565);
-			
-			Canvas newCanvas = new Canvas();
-			newCanvas.setBitmap(thumbBitMap);		
-			thumbBitMap.eraseColor(mBackgroundColor);
-			newCanvas.drawBitmap(loadedBM, 0, 0, mPainter);
-			
-			loadedBM.recycle();
-			
-			Log.d(TAG, "MkThumb Aft Recycle "+SKNotes.getMemUsageString());
-			
-			return thumbBitMap;
+
+			if (loadedBM != null) {
+				Bitmap thumbBitMap = Bitmap.createBitmap(loadedBM.getWidth(), loadedBM.getHeight(),
+						Bitmap.Config.RGB_565);
+
+				Canvas newCanvas = new Canvas();
+				newCanvas.setBitmap(thumbBitMap);
+				thumbBitMap.eraseColor(mBackgroundColor);
+				newCanvas.drawBitmap(loadedBM, 0, 0, mPainter);
+
+				loadedBM.recycle();
+
+				Log.d(TAG, "MkThumb Aft Recycle " + SKNotes.getMemUsageString());
+				return thumbBitMap;
+			} else {
+				return null;
+			}
 		}
 
 		@Override
