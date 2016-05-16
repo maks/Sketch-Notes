@@ -288,7 +288,7 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
                 return; //do nothing if no unsaved changes pending
             }
             try {
-                FileOutputStream out = ((Activity)getContext()).openFileOutput(filename,
+                FileOutputStream out = (getContext()).openFileOutput(filename,
                         Context.MODE_PRIVATE);
                 mBitmap.compress(Bitmap.CompressFormat.PNG, 99, out); //note PNG lossless
                 mUnsaved = false;

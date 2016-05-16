@@ -1,19 +1,12 @@
 package com.manichord.sketchnotes;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Date;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +18,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Date;
 
 public class SKNotes extends Activity {
 
@@ -105,67 +103,14 @@ public class SKNotes extends Activity {
         // make sure current version is saved
         sView.saveCurrentBitMap(mCurrentFileName);
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        File extFile = new File(getShareDir(), mCurrentFileName);
-        FileInputStream internalFile = null;
-        try {
-            internalFile = getApplicationContext().openFileInput(
-                    mCurrentFileName);
-            copyToFile(internalFile, extFile);
-            Uri sketchUri = Uri.fromFile(extFile);
-            sharingIntent.setType("image/png");
-            sharingIntent.putExtra(Intent.EXTRA_STREAM, sketchUri);
-            startActivity(Intent.createChooser(sharingIntent,
-                    "Share Sketch Using..."));
-        } catch (IOException e) {
-            Log.e(TAG, "error sharing " + mCurrentFileName, e);
-        } finally {
-            if (internalFile != null) {
-                try {
-                    internalFile.close();
-                } catch (IOException e) {
-                    // can't do anything about this
-                }
-            }
-        }
-    }
 
-    private File getShareDir() {
-        File dir = new File(getExternalCacheDir(), "share");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        return dir;
-    }
-
-    /**
-     * Copies src file to dst file. If the dst file does not exist, it will be
-     * created.
-     * 
-     * @param src
-     * @param dst
-     * @throws IOException
-     */
-    public static void copyToFile(InputStream src, File dst)
-            throws IOException {
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(dst);
-
-            // Transfer bytes from in to out
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = src.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                // can't do anything about this
-            }
-        }
+        Uri sketchUri = FileProvider.getUriForFile(getApplicationContext(),
+                "com.manichord.sketchnotes.fileprovider",
+                new File(getApplicationContext().getFilesDir(),mCurrentFileName));
+        sharingIntent.setType("image/png");
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, sketchUri);
+        startActivity(Intent.createChooser(sharingIntent,
+                "Share Sketch Using..."));
     }
 
     @Override

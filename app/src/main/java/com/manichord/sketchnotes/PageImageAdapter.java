@@ -130,7 +130,7 @@ public class PageImageAdapter extends BaseAdapter {
 		protected Bitmap doInBackground(Integer... params) {
 			mPosition = params[0];
 			File currentfile = mFileList[mPosition];
-			Log.e(TAG, "img file:"+currentfile);    	
+			Log.d(TAG, "img file:"+currentfile);
 	    	//for explanation of why to use BMFactory options see 
 	    	//http://stackoverflow.com/questions/477572/android-strange-out-of-memory-issue/823966#823966
 	    	
