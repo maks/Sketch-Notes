@@ -1,6 +1,5 @@
 package com.manichord.sketchnotes;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -10,17 +9,9 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TableRow;
-import android.widget.Toast;
 
 import com.manichord.sketchnotes.databinding.SknotesActivityBinding;
 
@@ -33,21 +24,7 @@ public class SKNotesActivity extends AppCompatActivity {
 
     private static final String TAG = "SKNotesActivity";
 
-    /** Menu ID for the command to clear the window. */
-    private static final int CLEAR_ID = Menu.FIRST;
-
-    /** Menu ID for the command to list pages */
-    private static final int PAGELIST_ID = Menu.FIRST + 1;
-
-    /** Menu ID for the command to Save current page */
-    private static final int SETTINGS_ID = Menu.FIRST + 2;
-
-    /** Menu ID for the command to Save current page */
-    private static final int SHARE_ID = Menu.FIRST + 3;
-
     protected static final String LOAD_FILENAME = "com.manichord.sketchnotes.load_filename";
-
-    private ImageButton colourMenuButton;
 
     private String mCurrentFileName;
     private SknotesActivityBinding mBinding;
@@ -152,6 +129,8 @@ public class SKNotesActivity extends AppCompatActivity {
 
         mBinding.penColourSpinner.setAdapter(new PensCustomAdapter(this, PenModel.getPens(this.getApplicationContext())));
 
+        mBinding.setSpinModel(new PenSelectionSpinnerModel(mBinding.skview));
+
         Date now = new Date();
 
         String fileToLoad = getIntent().getStringExtra(LOAD_FILENAME);
@@ -172,68 +151,5 @@ public class SKNotesActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Log.d(TAG, " SKNotesActivity - " + SKNotesActivity.getMemUsageString());
-    }
-
-    /**
-     * Extends {@link BetterPopupWindow}
-     * <p>
-     * Overrides onCreate to create the view and register the button listeners
-     *
-     * @author qbert
-     *
-     */
-    private static class ColoursPopupWindow extends BetterPopupWindow implements
-            OnClickListener {
-
-        //ref to view used to set current pen/pencil drawing colour
-        private SketchView sView;
-
-        public ColoursPopupWindow(View anchor, SketchView view) {
-            super(anchor);
-            this.sView = view;
-        }
-
-        @Override
-        protected void onCreate() {
-            // inflate layout
-            LayoutInflater inflater = (LayoutInflater) this.anchor.getContext()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            ViewGroup root = (ViewGroup) inflater.inflate(
-                    R.layout.colours_popup, null);
-
-            // setup button events
-            for (int i = 0, icount = root.getChildCount(); i < icount; i++) {
-                View v = root.getChildAt(i);
-
-                if (v instanceof TableRow) {
-                    TableRow row = (TableRow) v;
-
-                    for (int j = 0, jcount = row.getChildCount(); j < jcount; j++) {
-                        View item = row.getChildAt(j);
-                        if (item instanceof Button) {
-                            Button b = (Button) item;
-                            b.setOnClickListener(this);
-                        }
-                    }
-                }
-            }
-
-            // set the inflated view as what we want to display
-            this.setContentView(root);
-        }
-
-
-        public void onClick(View v) {
-            Button b = (Button) v;
-
-            sView.setCurrentPenColour(b.getText().toString());
-
-            //display a simple toast as a confirmation to user
-            Toast.makeText(this.anchor.getContext(), b.getText(),
-                    Toast.LENGTH_SHORT).show();
-
-            this.dismiss();
-        }
     }
 }
