@@ -17,4 +17,23 @@
 	    <item>pen_medium</item>
 	    <item>pen_large</item>
     </string-array>
+
+    <string-array name="penNameList">
+        <item>@string/pen_hb_pencil</item>
+        <item>@string/pen_h4_pencil</item>
+        <item>@string/pen_black</item>
+        <item>@string/pen_blue</item>
+        <item>@string/pen_red</item>
+        <item>@string/pen_yellow_hl</item>
+    </string-array>
+    
+    <integer-array name="penColourList">
+        <item>@color/hb_pencil</item>
+        <item>@color/h4_pencil</item>
+        <item>@color/black_pen</item>
+        <item>@color/blue_pen</item>
+        <item>@color/red_pen</item>
+        <item>@color/yellow_hl</item>
+    </integer-array>
+    
 </resources>

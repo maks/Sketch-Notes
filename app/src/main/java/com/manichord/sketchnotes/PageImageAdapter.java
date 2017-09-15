@@ -64,7 +64,7 @@ public class PageImageAdapter extends BaseAdapter {
 
 	// create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
-    	Log.d(TAG,"Page Adapter - "+SKNotes.getMemUsageString());
+    	Log.d(TAG,"Page Adapter - "+ SKNotesActivity.getMemUsageString());
     	    	
     	if (convertView == null) {  // if it's not recycled, initialize some attributes
         	Log.d(TAG, "NEW IMG VIEW");
@@ -150,7 +150,7 @@ public class PageImageAdapter extends BaseAdapter {
 
 				loadedBM.recycle();
 
-				Log.d(TAG, "MkThumb Aft Recycle " + SKNotes.getMemUsageString());
+				Log.d(TAG, "MkThumb Aft Recycle " + SKNotesActivity.getMemUsageString());
 				return thumbBitMap;
 			} else {
 				return null;

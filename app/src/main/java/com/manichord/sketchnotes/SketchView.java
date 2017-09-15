@@ -29,7 +29,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class SketchView extends View implements OnTouchListener, OnClickListener {
+public class SketchView extends View implements OnTouchListener {
 
         private static final String TAG = "SketchView";
 
@@ -55,7 +55,12 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
         int pass = 0;
 
         private boolean mUnsaved = false;
-        private boolean mEraserMode = false;
+
+    public void setEraserMode(boolean eraserMode) {
+        mEraserMode = eraserMode;
+    }
+
+    private boolean mEraserMode = false;
 
         public SketchView(Context context) {
             this(context, null);
@@ -137,7 +142,7 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
             }
             Date now = new Date();
             if (now.getTime() > (mLastSaveTime + SAVE_DELAY) ) {
-                saveCurrentBitMap(((SKNotes)getContext()).getCurrentFileName());
+                saveCurrentBitMap(((SKNotesActivity)getContext()).getCurrentFileName());
                 mLastSaveTime = now.getTime();
             }
         }
@@ -211,7 +216,7 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
             createNewDrawingCanvasAndBitMap(w,h);
 
             drawPageGridOrLines(w,h);
-            loadBitMap(((SKNotes)getContext()).getCurrentFileName());
+            loadBitMap(((SKNotesActivity)getContext()).getCurrentFileName());
         }
 
         public void clear() {
@@ -311,30 +316,6 @@ public class SketchView extends View implements OnTouchListener, OnClickListener
             }
         }
 
-
-        public void onClick(View v) {
-            //handle button clicks for pen/pencolour/eraser
-            int selectedBg = getResources().getColor(R.color.selected_button_background);
-            int unselectedBg = getResources().getColor(R.color.unselected_button_background);
-
-            switch(v.getId()) {
-                case R.id.eraserButton:
-                    mEraserMode = true;
-                    v.setBackgroundColor(selectedBg);
-                    ((View)v.getParent()).findViewById(R.id.penButton).setBackgroundColor(unselectedBg);
-                    break;
-
-                case R.id.penButton:
-                    mEraserMode = false;
-                    v.setBackgroundColor(selectedBg);
-                    ((View)v.getParent()).findViewById(R.id.eraserButton).setBackgroundColor(unselectedBg);
-                    break;
-
-                case R.id.penColourButton:
-
-                    break;
-            }
-        }
 
         public void nullBitmaps() {
             mCanvas = null;

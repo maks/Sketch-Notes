@@ -1,15 +1,18 @@
 package com.manichord.sketchnotes;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,14 +22,16 @@ import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.Toast;
 
+import com.manichord.sketchnotes.databinding.SknotesActivityBinding;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Date;
 
-public class SKNotes extends Activity {
+import timber.log.Timber;
 
-    private static final String TAG = "SKNotes";
+public class SKNotesActivity extends AppCompatActivity {
+
+    private static final String TAG = "SKNotesActivity";
 
     /** Menu ID for the command to clear the window. */
     private static final int CLEAR_ID = Menu.FIRST;
@@ -42,66 +47,68 @@ public class SKNotes extends Activity {
 
     protected static final String LOAD_FILENAME = "com.manichord.sketchnotes.load_filename";
 
-    /** The view responsible for drawing the window. */
-    SketchView sView;
-
     private ImageButton colourMenuButton;
 
-
     private String mCurrentFileName;
+    private SknotesActivityBinding mBinding;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+
+        Timber.plant(new Timber.DebugTree());
+        Timber.d("TIMBER ready");
 
         setupViews();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, CLEAR_ID, 0, "New");
-        menu.add(0, PAGELIST_ID, 0, "Pages");
-        menu.add(0, SETTINGS_ID, 0, "Settings");
-        menu.add(0, SHARE_ID, 0, "Share");
-
-        return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case CLEAR_ID:
-            if (sView != null) {
-                sView.saveCurrentBitMap(mCurrentFileName);
+            case R.id.menu_draw:
+                mBinding.skview.setEraserMode(false);
+                return true;
+            case R.id.menu_eraser:
+                mBinding.skview.setEraserMode(true);
+                return true;
+            case R.id.menu_new_page:
+                if (mBinding.skview != null) {
+                    mBinding.skview.saveCurrentBitMap(mCurrentFileName);
 
-                Date now = new Date();
-                mCurrentFileName = "skpage" + now.getTime() + ".png";
-                sView.clear();
-            } else {
-                Log.e(TAG, "NO Sketch VIEW!!!");
-            }
-            return true;
-        case PAGELIST_ID:
-            Intent intent = new Intent(this, PagesList.class);
-            sView.saveCurrentBitMap(mCurrentFileName);
-            startActivity(intent);
-            return true;
-        case SETTINGS_ID:
-            startActivity(new Intent(this, SKNPrefs.class));
-            return true;
-        case SHARE_ID:
-            shareSketch();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+                    Date now = new Date();
+                    mCurrentFileName = "skpage" + now.getTime() + ".png";
+                    mBinding.skview.clear();
+                } else {
+                    Log.e(TAG, "NO Sketch VIEW!!!");
+                }
+                return true;
+            case R.id.menu_pages:
+                Intent intent = new Intent(this, PagesList.class);
+                mBinding.skview.saveCurrentBitMap(mCurrentFileName);
+                startActivity(intent);
+                return true;
+            case R.id.menu_settings:
+                startActivity(new Intent(this, SKNPrefs.class));
+                return true;
+            case R.id.menu_share:
+                shareSketch();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
     private void shareSketch() {
         // make sure current version is saved
-        sView.saveCurrentBitMap(mCurrentFileName);
+        mBinding.skview.saveCurrentBitMap(mCurrentFileName);
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
 
         Uri sketchUri = FileProvider.getUriForFile(getApplicationContext(),
@@ -116,16 +123,16 @@ public class SKNotes extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        sView.saveCurrentBitMap(mCurrentFileName);
-        sView.nullBitmaps();
+        mBinding.skview.saveCurrentBitMap(mCurrentFileName);
+        mBinding.skview.nullBitmaps();
         System.gc();
-        Log.d(TAG, "SKNotes onPause:"+mCurrentFileName+" mem:" + getMemUsageString());
+        Log.d(TAG, "SKNotesActivity onPause:"+mCurrentFileName+" mem:" + getMemUsageString());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "SKNotes onResume:"+mCurrentFileName+" mem:" + getMemUsageString());
+        Log.d(TAG, "SKNotesActivity onResume:"+mCurrentFileName+" mem:" + getMemUsageString());
         setupViews();
     }
 
@@ -136,16 +143,14 @@ public class SKNotes extends Activity {
     public static String getMemUsageString() {
         int usedNativeKbs = (int) (Debug.getNativeHeapAllocatedSize() / 1024L);
 
-        return String.format(" SKNotes Memory Used: %d KB", usedNativeKbs);
+        return String.format(" SKNotesActivity Memory Used: %d KB", usedNativeKbs);
     }
 
     private void setupViews() {
 
-        setContentView(R.layout.main);
-        sView = (SketchView) findViewById(R.id.skview);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.sknotes_activity);
 
-        findViewById(R.id.eraserButton).setOnClickListener(sView);
-        findViewById(R.id.penButton).setOnClickListener(sView);
+        mBinding.penColourSpinner.setAdapter(new PensCustomAdapter(this, PenModel.getPens(this.getApplicationContext())));
 
         Date now = new Date();
 
@@ -163,16 +168,10 @@ public class SKNotes extends Activity {
         	}
         }
 
-        this.colourMenuButton = (ImageButton) this.findViewById(R.id.penColourButton);
-        this.colourMenuButton.setOnClickListener(new View.OnClickListener() {
+        Toolbar toolbar = ((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(toolbar);
 
-            public void onClick(View v) {
-                ColoursPopupWindow dw = new ColoursPopupWindow(v, sView);
-                dw.showLikePopDownMenu();
-            }
-        });
-
-        Log.d(TAG, " SKNotes - " + SKNotes.getMemUsageString());
+        Log.d(TAG, " SKNotesActivity - " + SKNotesActivity.getMemUsageString());
     }
 
     /**
