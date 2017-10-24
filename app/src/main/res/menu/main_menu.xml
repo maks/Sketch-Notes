@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_draw"
+        android:title="@string/action_draw"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/menu_eraser"
+        android:title="@string/action_erase"
+        android:icon="@drawable/ic_eraser_variant"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/menu_new_page"
+        android:title="@string/action_new_sketch"
+        />
+    <item
+        android:id="@+id/menu_pages"
+        android:title="@string/action_pages"
+        />
+    <item
+        android:id="@+id/menu_settings"
+        android:title="@string/action_settings"
+        />
+    <item
+        android:id="@+id/menu_share"
+        android:title="@string/action_share"
+        />
+
+</menu>

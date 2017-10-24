@@ -39,7 +39,7 @@ public class PagesList extends Activity implements OnItemClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Log.d(TAG, "Create PAGESLIST - "+SKNotes.getMemUsageString());
+		Log.d(TAG, "Create PAGESLIST - "+ SKNotesActivity.getMemUsageString());
 		
 		setContentView(R.layout.pages);
 		
@@ -65,7 +65,7 @@ public class PagesList extends Activity implements OnItemClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case NEW_ID:
-			Intent intent = new Intent(this, SKNotes.class);
+			Intent intent = new Intent(this, SKNotesActivity.class);
 			startActivity(intent);			
 			return true;
 		default:
@@ -76,7 +76,7 @@ public class PagesList extends Activity implements OnItemClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.d(TAG, "Paused PAGESLIST"+SKNotes.getMemUsageString());
+		Log.d(TAG, "Paused PAGESLIST"+ SKNotesActivity.getMemUsageString());
 	}
 
 
@@ -124,8 +124,8 @@ public class PagesList extends Activity implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parent, View v,
 			int position, long id) {
 		Log.e(TAG, "pos:" + position);
-		Intent intent = new Intent(this, SKNotes.class);
-		intent.putExtra(SKNotes.LOAD_FILENAME, mAdapter.getFileName(position));
+		Intent intent = new Intent(this, SKNotesActivity.class);
+		intent.putExtra(SKNotesActivity.LOAD_FILENAME, mAdapter.getFileName(position));
 		startActivity(intent);
 	}
 

@@ -2,7 +2,23 @@
 <resources>
     <string name="hello">Hello World, main!</string>
     <string name="app_name">Sketch Notes</string>
+
     <string name="pagelist_title">Pages</string>
     <string name="preferences_title">Preferences</string>
-    
+
+    <string name="action_new_sketch">New</string>
+    <string name="action_pages">Pages</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_share">Share</string>
+
+    <string name="pen_hb_pencil">HB Pencil</string>
+    <string name="pen_h4_pencil">H4 Pencil</string>
+    <string name="pen_black">Black Pen</string>
+    <string name="pen_blue">Blue Pen</string>
+    <string name="pen_red">Red Pen</string>
+    <string name="pen_yellow_hl">Yellow HL</string>
+    <string name="action_draw">Draw</string>
+    <string name="action_erase">Erase</string>
+
+
 </resources>
