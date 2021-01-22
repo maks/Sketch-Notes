@@ -2,7 +2,7 @@
 <resources>
     <string name="hello">Hello World, main!</string>
     <string name="app_name">Sketch Notes</string>
-    <string name="pagelist_title">Pages</string>
-    <string name="preferences_title">Preferences</string>
+    <string name="pagelist_title">Seiten</string>
+    <string name="preferences_title">Einstellungen</string>
     
 </resources>
