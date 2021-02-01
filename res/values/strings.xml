@@ -5,4 +5,11 @@
     <string name="pagelist_title">Seiten</string>
     <string name="preferences_title">Einstellungen</string>
     
+    <!-- taken from preferences -->
+    android:title="Seitenhintergrund"
+    android:summary="Choose the type of ruling to use as the page background" "Wählen Sie welche Lineatur für den Hintergrund genutzt werden soll."
+    
+<ListPreference
+    android:title="Strichstärke"
+    android:summary="Wählen Sie die Breite der Schreibspitze." 
 </resources>
