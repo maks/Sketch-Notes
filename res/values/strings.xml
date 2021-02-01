@@ -6,10 +6,11 @@
     <string name="preferences_title">Einstellungen</string>
     
     <!-- taken from preferences -->
+    <!-- page background -->
     android:title="Seitenhintergrund"
-    android:summary="Choose the type of ruling to use as the page background" "Wählen Sie welche Lineatur für den Hintergrund genutzt werden soll."
-    
-<ListPreference
+    android:summary="Wählen Sie welche Lineatur für den Hintergrund genutzt werden soll."
+   
+    <!-- pen thickness -->
     android:title="Strichstärke"
     android:summary="Wählen Sie die Breite der Schreibspitze." 
 </resources>
