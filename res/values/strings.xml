@@ -2,7 +2,15 @@
 <resources>
     <string name="hello">Hello World, main!</string>
     <string name="app_name">Sketch Notes</string>
-    <string name="pagelist_title">Pages</string>
-    <string name="preferences_title">Preferences</string>
+    <string name="pagelist_title">Seiten</string>
+    <string name="preferences_title">Einstellungen</string>
     
+    <!-- taken from preferences -->
+    <!-- page background -->
+    android:title="Seitenhintergrund"
+    android:summary="Wählen Sie welche Lineatur für den Hintergrund genutzt werden soll."
+   
+    <!-- pen thickness -->
+    android:title="Strichstärke"
+    android:summary="Wählen Sie die Breite der Schreibspitze." 
 </resources>
